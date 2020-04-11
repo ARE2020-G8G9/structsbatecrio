@@ -1,25 +1,37 @@
-lt = 5
-Lt = 5
-test = [[1, 1, 1, 1 ,1 ,1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]
 
-case = {x : 1, y : 1, contenu : 132456798}
-bactérie_test = {x : 2, y : 2, age : 1, resistance = 0, famille : 1}
-antiobio_test = {x : 3, y : 3, age : 1, compatibilité : 1}
+
+case = {"x" : 1, "y" : 1, "contenu" : 132456798, "age" : 132, "resitance" : 1313, "taux_de_croissance" : 0.5}
+dict_ex = {"x" : 0, "y": 0, "contenu" : 1, "age" : -1, "resistance" : -1, "taux_de_croissance" : -1}
 
 #On définit les correspondances entre les chiffres et leur signification : 0 = vide ; 1 =  nourriture ; 2 = antibiotique ; 3 = bactérie1 ; 4 = bactérie2
 
 import random
 import numpy as np
 
-def init_boite(l, L):
-    res = [l * [1]] * L
+###Initialisation de la boite
+def coo(x, y):
+    return {'x' : x, 'y' : y, 'contenu' : 1, 'age' : 0, 'resistance' : -1, 'taux_croissance' : 0}
+
+def L_dico(k, L):
+    res = []
+    for i in range(0, L):
+        res.append(coo(k, i))
     return res
 
-def in_liste(n, liste):
-    for i in range(0, len(liste)):
-        if n == liste[i]:
-            return True
-    return False
+def init_boite(L):
+    res = []
+    for i in range(0,L):
+        res.append(L_dico(i, L))
+    return res
+
+def pos_aléa(boite):
+    L = len(boite);
+    l = len(boite[0])
+    return (random.choice(range(0, L)), random.choice(range(0, l)))
+
+###Trouver le voisinage (à tester avec le dico)(semble marcher quand meme)
+
+
 
 def voisinage(boite, x, y, taille) :
     res = []
@@ -102,19 +114,24 @@ def voisinage(boite, x, y, taille) :
                         res.append(boite[x + i][y + j])
     return res
 
-def pos_aléa(boite):
-    L = len(boite);
-    l = len(boite[0])
-    return (random.choice(range(0, L)), random.choice(range(0, l)))
+
+
+###Evolution du système (à changer avec les dico)
+
+def in_liste(n, liste):
+    for i in range(0, len(liste)):
+        if n == liste[i]:
+            return True
+    return False
 
 def mort_bacterie(boite, x, y):
-    boite[x][y] = 0
+    boite[x][y]['contenu'] = 0
     return boite
 
 def déplacement_possible(boite, x, y, taille):
     voisinage_direct = voisinage(boite, x, y, 1)
     for i in range(0, len(voisinage_direct)):
-        if voisinage_direct[i] == 0 or voisinage_direct[i] == 1:
+        if voisinage_direct[i]['contenu'] == 0 or voisinage_direct[i]['contenu'] == 1:
             return True
     return False
 
@@ -131,8 +148,9 @@ def deplacement(boite, x, y, new_x, new_y):
     return boite
 
 def naissance(boite, x, y, new_x, new_y):
+    temp = boite[x][y]
     boite[new_x][new_y] = boite[x][y]
-    boite[x][y] = 1 #laisse une nouvelle bactérie après s'être déplacée
+    boite[x][y] = temp #laisse une nouvelle bactérie après s'être déplacée
     return boite
 
 
