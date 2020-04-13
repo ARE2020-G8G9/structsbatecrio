@@ -8,6 +8,23 @@ dict_ex = {"x" : 0, "y": 0, "contenu" : 1, "age" : -1, "resistance" : -1, "taux_
 import random
 import numpy as np
 
+import structures_complexes as sc
+
+structures_complexes.testAjMod()
+
+#tests de l'initialisation des classes
+
+"""
+bacteria = sc.Bacterie()
+print(bacteria.souche)
+print(bacteria.symb)
+print(bacteria.x)
+print(bacteria.y)
+print(bacteria.age)
+print(bacteria.resistance)
+print(bacteria.taux_de_croissance)
+"""
+
 ###Initialisation de la boite
 def coo(x, y):
     return {'x' : x, 'y' : y, 'contenu' : 1, 'age' : 0, 'resistance' : -1, 'taux_croissance' : 0}
