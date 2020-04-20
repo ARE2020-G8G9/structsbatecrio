@@ -1,5 +1,5 @@
 
-
+#NE JAMAIS UTILISER CES DICO POUR REMPLACER LE CONTENU D'UNE CASE ! JAMAIS
 dict_ex = {"x" : 0, "y": 0, "contenu" : 1, "dernier_repas" : 0, "age" : -1, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 0}
 case_nourriture = {"x" : 0, "y": 0, "contenu" : 1, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
 case_vide = {"x" : 0, "y": 0, "contenu" : 0, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
@@ -14,9 +14,9 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-import structures_complexes as sc
+"""import structures_complexes as sc
 
-sc.testAjMod()
+sc.testAjMod()"""
 
 #tests de l'initialisation des classes
 
@@ -39,9 +39,9 @@ def pause():
 
 lifespawn_bact1 = 20
 lifespawn_bact2 = 1
-lifespawn_sans_nourriture_bact1 = 10
+lifespawn_sans_nourriture_bact1 = 5
 lifespawn_sans_nourriture_bact2 = 5
-lifespawn_antibio = 200
+lifespawn_antibio = 20
 
 def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
     if temp_opt <= 20:
@@ -53,7 +53,7 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
     if temp_opt >= 45:
         tmin = 45
         tmax = 70
-    taux_temp = ((temp - tmax)*(temp - tmin)**2) / ((temp_opt - tmin) * ((temp_opt - tmin)*(temp - temp_opt) - (temp_opt - tmax)*(temp_opt + tmin - 2*temp)))
+    taux_temp = ((temp - tmax)*(temp - tmin)**2) / ((temp_opt - tmin) * (temp_opt - tmin)*(temp - temp_opt) - (temp_opt - tmax)*(temp_opt + tmin - 2*temp))
     if ph_opt <= 6:
         ph_min = 1
         ph_max = 6
@@ -62,8 +62,11 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
         ph_max = 8
     if ph_opt > 8:
         ph_min = 7
-        ph_max = 11,5
-    taux_ph = ((ph - ph_min)*(ph - ph_max)) / ((ph-ph_min)*(ph - ph_max) - (ph - ph_opt)**2)
+        ph_max = 11.5
+    a = ph - ph_min
+    b = ph - ph_max
+    c = ph - ph_opt
+    taux_ph = a * b / ( a * b - c**2 )
     return taux_opt * taux_temp * taux_ph
 
 def init_bact1(taux_opt1, ph, ph_opt1, temp, temp_opt1):
@@ -249,6 +252,8 @@ def deplacement(boite, x, y, coordonnees):
     if box[new_x][new_y]['contenu'] == 1:
         box[x][y]['dernier_repas'] = 0
     box[new_x][new_y] = box[x][y]
+    box[new_x][new_y]['x'] = new_x
+    box[new_x][new_y]['y'] = new_y
     box[new_x][new_y]['nb_action'] = 1
     box[x][y] = {"x" : x, "y": y, "contenu" : 0,"dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1} #laisse un vide après s'être déplacée
     return box
@@ -276,10 +281,18 @@ def choix_deplacement(boite, x, y, taille):
 def naissance(boite, x, y, coordonnees):
     new_x, new_y = coordonnees
     box = boite
-    bact_type = boite[x][y]['contenu']
+    bact_type = box[x][y]['contenu']
+    resi = box[x][y]['resistance']
+    taux = box[x][y]['taux_de_croissance']
     box = deplacement(boite, x, y, coordonnees)
-    box[x][y] = {"x" : x, "y": y, "contenu" : bact_type,"dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : box[new_x][new_y]['taux_de_croissance'], "capa_de_repro" : 0, "nb_action" : 1} #laisse une nouvelle bactérie après s'être déplacée
-    box[new_x][new_y]['capa_de_repro'] = 0
+    box[x][y]['contenu'] = bact_type
+    box[x][y]['dernier_repas'] = 0
+    box[x][y]['age'] = 0
+    box[x][y]['resistance'] = resi
+    box[x][y]['taux_de_croissance'] = taux
+    box[x][y]['capa_de_repro'] = 0
+    box[x][y]['nb_action'] = 1
+    #box[x][y] = {"x" : x, "y": y, "contenu" : bact_type,"dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : box[new_x][new_y]['taux_de_croissance'], "capa_de_repro" : 0, "nb_action" : 1} ##laisse une nouvelle bactérie après s'être déplacée
     return box
 
 def pos_alea_antibio(boite):
@@ -292,9 +305,8 @@ def pos_alea_antibio(boite):
 def remplace_par_antibio_si_non_resis(boite, x, y):
     box = boite
     if box[x][y]['resistance'] == -1:
-        box[x][y] = case_antibio
-        box[x][y]['x'] = x
-        box[x][y]['y'] = y
+        box[x][y]['contenu'] = 2
+        box[x][y]['age'] = 0
     return box
 
 def ajout_antibio(boite, coordonnees):
@@ -327,8 +339,6 @@ def evo_capa_de_reprod(boite):
                 box[i][j]['capa_de_repro']+=0.1
     return box
 
-
-
 def death_verif_and_apply(boite):
     box = boite
     for i in range(0, len(box)):
@@ -336,8 +346,7 @@ def death_verif_and_apply(boite):
             contenu = box[i][j]['contenu']
             age = box[i][j]['age']
             dernier_repas = box[i][j]['dernier_repas']
-            if contenu == 2 and age >= 200:
-                print(box[i][j]['x'], box[i][j]['y'])
+            if contenu == 2 and age >= lifespawn_antibio:
                 mort_antibio(boite, i, j)
             if contenu == 3 and (age >= lifespawn_bact1 or dernier_repas >= lifespawn_sans_nourriture_bact1):
                 box = mort_bacterie(box, i, j)
@@ -353,6 +362,7 @@ def reset_nb_action(boite):
     return box
 
 def coo_vide(boite):
+    """determine l'ensemble des coordonnees de contenu 0"""
     res = []
     for i in range(0, len(boite)):
         for j in range(0, len(boite[0])):
@@ -362,6 +372,7 @@ def coo_vide(boite):
     return res
 
 def coo_vide_nourriture(boite, demi_cote):
+    """dertermine l'ensemble des cases avec ajout de nourriture possible"""
     res = []
     dim = len(boite)
     for i in range(0, len(boite)):
@@ -382,7 +393,7 @@ def ajout_nourriture(boite, demi_cote, coordonnees):
         for j in range(-demi_cote, demi_cote + 1):
             case = box[x + i][y + j]
             if case["contenu"] == 0:
-                case = {"x" : x + i, "y": y + j, "contenu" : 1, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+                box[x + i][y + j] = {"x" : x + i, "y": y + j, "contenu" : 1, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
     return box
 
 
@@ -447,20 +458,20 @@ def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout):
     box = boite
     if n_iter >= debut_ajout and n_iter % f_antibio == 0:
         box = ajout_antibio(boite, pos_alea_antibio(box))
-        plot_boite(box)
-    if n_iter >= debut_ajout and n_iter % f_nourriture == 0 and coo_vide_nourriture(box, demi_cote) != [] :
+    if n_iter >= debut_ajout and n_iter % f_nourriture == 0 and coo_vide_nourriture(box, demi_cote) != []:
         box = ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote))
+        plot_boite(box)
     return box
 
 def structure_bacterio(iter_max):
     temp = 25
     ph = 7
     box = init_boite(100)
-    init_pos_bact(box, init_bact1(1, ph, 7, temp, 25))
+    init_pos_bact(box, init_bact1(1, ph, 8, temp, 30))
     cmpt = 0
-    f_antibio = 5
-    f_nourriture = 1
-    demi_cote = 15
+    f_antibio = 25
+    f_nourriture = 20
+    demi_cote = 5
     debut_ajout = 10
     plot_boite(box)
     while cmpt < iter_max and continuer(box):
