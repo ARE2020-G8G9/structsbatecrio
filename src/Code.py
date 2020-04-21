@@ -429,6 +429,30 @@ def nombres_individus(boite):
                 res["Bacterie2"]+=1
     return res
 
+def affiche_courbes(iter_max):
+    temp = 25
+    ph = 7
+    cmpt = 0
+    nb_bacterie = 0
+    f_antibio = 25
+    f_nourriture = 20
+    demi_cote = 5
+    debut_ajout = 10
+    box = init_boite(100)
+    lsy_nb_bacterie = [0,10,20,30,40,50,60,70,80,90,100,110]
+    lsx_taille = []
+    lsx = []
+    while cmpt < iter_max and continuer(box):
+        box = tour(box)
+        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
+        lsy_nb_bacterie.append(nombres_individus(box))
+        lsx_taille.append(cmpt)
+        cmpt+=1
+    plt.plot(lsx_taille,'bo',lsy_nb_bacterie)
+    plt.ylabel("Nombre de Bacterie")
+    plt.xlabel("Nombre d'itération")
+    plt.show()
+
 
 ###Global
 def continuer(boite):
