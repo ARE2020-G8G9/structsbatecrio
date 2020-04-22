@@ -7,7 +7,7 @@ case_antibio = {"x" : 0, "y": 0, "contenu" : 2, "dernier_repas" : 0, "age" : 0, 
 
 #On définit les correspondances entre les chiffres et leur signification : 0 = vide ; 1 =  nourriture ; 2 = antibiotique ; 3 = bactérie1 ; 4 = bactérie2
 
-import tkinter
+from tkinter import *
 import time
 import math
 import random
@@ -416,6 +416,7 @@ def plot_boite(boite):
     plt.tick_params(top=False, bottom=False, right=False, left=False, labelleft=False, labelbottom=False)
     plt.show()
 
+
 ### Statistiques
 #pas mal de fonctions proches des stats de Schelling
 def nombres_individus(boite):
@@ -490,17 +491,90 @@ def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout):
 def structure_bacterio(iter_max):
     temp = 25
     ph = 7
-    box = init_boite(100)
+    box = init_boite(500)
     init_pos_bact(box, init_bact1(1, ph, 8, temp, 30))
     cmpt = 0
     f_antibio = 25
     f_nourriture = 20
     demi_cote = 5
     debut_ajout = 10
-    plot_boite(box)
     while cmpt < iter_max and continuer(box):
         box = tour(box)
         box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
         cmpt+=1
-    plot_boite(box)
     return None
+
+###Fenetre Tkinter
+
+def affichage(iter_max):
+
+
+    fenetre = Tk()
+
+    label = Label(fenetre, text = "Merci d'utiliser notre simulation de croissance bacteriologie")
+    label.pack()
+
+    #fenetre['bg']='white'
+
+    # frame 1 parametres bact1
+    Frame1 = LabelFrame(fenetre, text="Parametres sur la premiere bacterie", padx=20, pady=20)
+    Frame1.pack(side = LEFT, fill="both", expand="yes")
+
+    # frame 2 parametre bact2
+    Frame2 = LabelFrame(fenetre, text="Parametres sur la seconde bacterie", padx=20, pady=20)
+    Frame2.pack(side = LEFT, fill="both", expand="yes")
+
+
+    # frame 3 boite
+    Frame3 = LabelFrame(fenetre, text="Etat de la boite", padx=20, pady=20)
+    Frame3.pack(side = RIGHT, fill="both", expand="yes")
+
+    """Ajout de labels
+    Label(Frame1, text="Parametre sur la premiere bacterie").pack(padx=10, pady=10)
+    Label(Frame2, text="Parametre sur la seconde bacterie").pack(padx=10, pady=10)
+    Label(Frame3, text="Etat de la boite").pack(padx=10, pady=10)"""
+
+    #Frame1
+    Label(Frame1, text="Veuillez choisir les paramètres de l'expérérience").pack(padx=10, pady = 3)
+    Scale(Frame1, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal').pack()
+    Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie').pack()
+    Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger').pack()
+    Scale(Frame1, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale').pack()
+    Scale(Frame1, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal').pack()
+
+    #Frame 2
+    bouton = Checkbutton(Frame2, text="Deux bacteries ?")
+    bouton.pack()
+    Scale(Frame2, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal').pack()
+    Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie').pack()
+    Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger').pack()
+    Scale(Frame2, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale').pack()
+    Scale(Frame2, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal').pack()
+
+    #Frame3
+    canvas = Canvas(Frame3, width=500, height=500, background='black')
+    #canvas = bouge_canvas(box, canvas)
+    canvas.pack()
+    Scale(Frame3, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température de la boite').pack()
+    Scale(Frame3, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH de la boite').pack()
+
+    fenetre.mainloop()
+
+
+
+def bouge_canvas(box, canvas):
+    arr = convert_to_array(box)
+    for i in range(0, len(arr)):
+        for j in range(0, len(arr[0])):
+            contenu = arr[i][j]
+            if contenu == 0:
+                canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "white")
+            if contenu == 1:
+                canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "green")
+            if contenu == 2:
+                canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "blue")
+            if contenu == 3:
+                canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "red")
+            if contenu == 4:
+                canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "orange")
+    return canvas
