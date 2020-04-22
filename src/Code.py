@@ -5,6 +5,14 @@ case_nourriture = {"x" : 0, "y": 0, "contenu" : 1, "dernier_repas" : 0, "age" : 
 case_vide = {"x" : 0, "y": 0, "contenu" : 0, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
 case_antibio = {"x" : 0, "y": 0, "contenu" : 2, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
 
+###Initialisation des tableaux contenant les données de la boîte en fonction du nombre d'itérations:
+nb_vides = []
+nb_antibio = []
+nb_nourriture = []
+nb_bacterie1 = []
+nb_bacterie2 = []
+nb_total_bacteries =[]
+
 #On définit les correspondances entre les chiffres et leur signification : 0 = vide ; 1 =  nourriture ; 2 = antibiotique ; 3 = bactérie1 ; 4 = bactérie2
 
 from tkinter import *
@@ -14,22 +22,6 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-"""import structures_complexes as sc
-
-sc.testAjMod()"""
-
-#tests de l'initialisation des classes
-
-"""
-bacteria = sc.Bacterie()
-print(bacteria.souche)
-print(bacteria.symb)
-print(bacteria.x)
-print(bacteria.y)
-print(bacteria.age)
-print(bacteria.resistance)
-print(bacteria.taux_de_croissance)
-"""
 def pause():
     programPause = input("Press the <ENTER> key to continue...")
 
@@ -419,7 +411,7 @@ def plot_boite(boite):
 
 ### Statistiques
 #pas mal de fonctions proches des stats de Schelling
-def nombres_individus(boite):
+def nombre_individus(boite):
     res = {"Bacterie1" : 0, "Bacterie2" : 0}
     for i in range(0, len(boite)):
         for j in range(0, len(boite[0])):
@@ -430,7 +422,45 @@ def nombres_individus(boite):
                 res["Bacterie2"]+=1
     return res
 
+def nombre_nourriture_antibio(boite):
+    res = {"Vide" : 0, "Nourriture" : 0, "Antibio" : 0}
+    for i in range(0, len(boite)):
+        for j in range(0, len(boite[0])):
+            contenu = boite[i][j]['contenu']
+            if contenu == 0:
+                res["Vide"]+=1
+            if contenu == 1:
+                res["Nourriture"]+=1
+            if contenu == 2:
+                res["Antibio"]+=1
+    return res
+###Je laisse tout de même cette fonction pour la reprendre au cas où la nouvelle ne correspond pas à ce dont on a besoin
+#def affiche_courbes(iter_max):
+#    temp = 25
+#    ph = 7
+#    cmpt = 0
+#    nb_bacterie = 0
+#    f_antibio = 25
+#    f_nourriture = 20
+#    demi_cote = 5
+#    debut_ajout = 10
+#    box = init_boite(100)
+#    lsy_nb_bacterie = [0,10,20,30,40,50,60,70,80,90,100,110]
+#    lsx_taille = []
+#    lsx = []
+#    while cmpt < iter_max and continuer(box):
+#        box = tour(box)
+#        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
+#        lsy_nb_bacterie.append(nombre_individus(box))
+#        lsx_taille.append(cmpt)
+#        cmpt+=1
+#    plt.plot(lsx_taille,'bo',lsy_nb_bacterie)
+#    plt.ylabel("Nombre d'entités")
+#    plt.xlabel("Nombre d'itérations")
+#    plt.show()
+    
 def affiche_courbes(iter_max):
+    x = np.linspace(0, iter_max, iter_max)
     temp = 25
     ph = 7
     cmpt = 0
@@ -438,26 +468,22 @@ def affiche_courbes(iter_max):
     f_antibio = 25
     f_nourriture = 20
     demi_cote = 5
-    debut_ajout = 10
-    box = init_boite(100)
-    lsy_nb_bacterie = [0,10,20,30,40,50,60,70,80,90,100,110]
-    lsx_taille = []
-    lsx = []
-    while cmpt < iter_max and continuer(box):
-        box = tour(box)
-        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
-        lsy_nb_bacterie.append(nombres_individus(box))
-        lsx_taille.append(cmpt)
-        cmpt+=1
-    plt.plot(lsx_taille,'bo',lsy_nb_bacterie)
-    plt.ylabel("Nombre de Bacterie")
-    plt.xlabel("Nombre d'itération")
+    
+    plt.plot(x, nb_bacterie1, label = 'souche1')
+    plt.plot(x, nb_bacterie2, label = 'souche2')
+    plt.plot(x, nb_nourriture, label = 'nourriture')
+    plt.plot(x, nb_antibio, label = 'antibio')
+    plt.plot(x, nb_total_bacteries, label = 'total_bacteries')
+    
+    plt.ylabel("Nombre d'entités")
+    plt.xlabel("Nombre d'itérations")
+    plt.legend()
     plt.show()
 
 
 ###Global
 def continuer(boite):
-    pop = nombres_individus(boite)
+    pop = nombre_individus(boite)
     if pop["Bacterie1"] + pop["Bacterie2"] == 0:
         return False
     return True
@@ -489,6 +515,8 @@ def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout):
     return box
 
 def structure_bacterio(iter_max):
+    res_bac = dict()
+    res_autres = dict()  
     temp = 25
     ph = 7
     box = init_boite(500)
@@ -502,6 +530,18 @@ def structure_bacterio(iter_max):
         box = tour(box)
         box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
         cmpt+=1
+        
+        ###On sauvegarde les données de la boîte à la cmpt_ième itération
+        res_bac = nombre_individus(box)
+        res_autres = nombre_nourriture_antibio(box)
+        nb_bacterie1.append(res_bac["Bacterie1"])
+        nb_bacterie2.append(res_bac["Bacterie2"])
+        nb_nourriture.append(res_autres["Nourriture"])
+        nb_antibio.append(res_autres["Antibio"])
+        nb_total_bacteries.append(nb_bacterie1[-1] + nb_bacterie2[-1])
+        
+        plot_boite(box)
+    affiche_courbes(iter_max)
     return None
 
 ###Fenetre Tkinter
@@ -557,6 +597,10 @@ def affichage(iter_max):
     canvas.pack()
     Scale(Frame3, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température de la boite').pack()
     Scale(Frame3, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH de la boite').pack()
+
+    ###Bouton pour lancer la simulation   
+    launcher = Button(Frame2, text="Lancer la simulation")
+    launcher.pack(side="bottom")
 
     fenetre.mainloop()
 
