@@ -16,6 +16,7 @@ nb_total_bacteries =[]
 #On définit les correspondances entre les chiffres et leur signification : 0 = vide ; 1 =  nourriture ; 2 = antibiotique ; 3 = bactérie1 ; 4 = bactérie2
 
 from tkinter import *
+from tkinter.messagebox import *
 import time
 import math
 import random
@@ -25,15 +26,29 @@ from matplotlib import pyplot as plt
 def pause0():
     programPause = input("Press the <ENTER> key to continue...")
 
+###Paramètres globaux à modifier avec les curseurs
+
+"""lifespawn_bact1 = 20
+lifespawn_bact2 = 1
+lifespawn_sans_nourriture_bact1 = 20
+lifespawn_sans_nourriture_bact2 = 5
+lifespawn_antibio = 20
+temp1 = 25
+temp2 = 25
+ph1 = 7
+ph2 = 7
+deux_bact = 0
+symbiose = 0
+temp = 25
+ph = 7
+f_nourriture = 20
+quantite = 0
+f_antibio = 20
+iter_max = 100"""
+
 ###initialisation des paramètres et bacteries
 
 #widget ph_opt, temp_opt, taux de croissance optimal... enfin tous les parametres mis en demande a l'utilisateur pour deux bacteries donc on indice les valeur par le type 1 ou 2 de la bacterie (ex : ph_opt2) sauf pour la temperature de la boite notee temp et son ph note ph qui prennent d'autres curseurs
-
-lifespawn_bact1 = 20
-lifespawn_bact2 = 1
-lifespawn_sans_nourriture_bact1 = 5
-lifespawn_sans_nourriture_bact2 = 5
-lifespawn_antibio = 20
 
 def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
     if temp_opt <= 20:
@@ -88,10 +103,15 @@ def pos_alea(boite):
     l = len(boite[0])
     return (random.choice(range(0, L)), random.choice(range(0, l)))
 
-def init_pos_bact(boite, bact):
+def init_pos_bact(boite, bact, canvas):
     box = boite
     x, y = pos_alea(boite)
     box[x][y] = bact
+    x0 = str(x) + 'm'
+    y0 = str(y) + 'm'
+    x1 = str(x + 1) + 'm'
+    y1 = str(y +1) + 'm'
+    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
     return box
 
 ###Trouver le voisinage (à tester avec le dico)(semble marcher quand meme)
@@ -189,14 +209,24 @@ def in_liste(contenu, liste): #cherche si un contenu est dans une liste de dico
             return True
     return False
 
-def mort_bacterie(boite, x, y):
+def mort_bacterie(boite, x, y, canvas):
     box = boite
     box[x][y] = {"x" : x, "y": y, "contenu" : 0, 'dernier_repas' : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, 'capa_de_repro' : 0, 'nb_action' : 1}
+    x0 = str(x) + 'm'
+    y0 = str(y) + 'm'
+    x1 = str(x + 1) + 'm'
+    y1 = str(y + 1) + 'm'
+    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "white")
     return box
 
-def mort_antibio(boite, x, y):
+def mort_antibio(boite, x, y, canvas):
     box = boite
     box[x][y] = {"x" : x, "y": y, "contenu" : 0, 'dernier_repas' : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, 'capa_de_repro' : 0, 'nb_action' : 1}
+    x0 = str(x) + 'm'
+    y0 = str(y) + 'm'
+    x1 = str(x + 1) + 'm'
+    y1 = str(y + 1) + 'm'
+    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "white")
     return box
 
 def deplacement_possible(boite, x, y):
@@ -238,7 +268,7 @@ def chemin_plus_rapide(x0, y0, x1, y1):
     """Renvoie le chemin le plus rapide de (x0, y0) à (x1, y1) dans un tuple de deplacements à effectuer"""
     return (x1 - x0, y1 - y0)
 
-def deplacement(boite, x, y, coordonnees):
+def deplacement(boite, x, y, coordonnees, canvas):
     new_x, new_y = coordonnees
     box = boite
     if box[new_x][new_y]['contenu'] == 1:
@@ -248,6 +278,18 @@ def deplacement(boite, x, y, coordonnees):
     box[new_x][new_y]['y'] = new_y
     box[new_x][new_y]['nb_action'] = 1
     box[x][y] = {"x" : x, "y": y, "contenu" : 0,"dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1} #laisse un vide après s'être déplacée
+    #Afficher le blanc
+    x0 = str(x) + 'm'
+    y0 = str(y) + 'm'
+    x1 = str(x + 1) + 'm'
+    y1 = str(y + 1) + 'm'
+    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "white")
+    #afficher la nouvelle pos
+    x0 = str(new_x) + 'm'
+    y0 = str(new_y) + 'm'
+    x1 = str(new_x + 1) + 'm'
+    y1 = str(new_y + 1) + 'm'
+    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
     return box
 
 def voisinage_direct_libre(boite, x, y):
@@ -270,13 +312,13 @@ def choix_deplacement(boite, x, y, taille):
     else:
         return None
 
-def naissance(boite, x, y, coordonnees):
+def naissance(boite, x, y, coordonnees, canvas):
     new_x, new_y = coordonnees
     box = boite
     bact_type = box[x][y]['contenu']
     resi = box[x][y]['resistance']
     taux = box[x][y]['taux_de_croissance']
-    box = deplacement(boite, x, y, coordonnees)
+    box = deplacement(boite, x, y, coordonnees, canvas)
     box[x][y]['contenu'] = bact_type
     box[x][y]['dernier_repas'] = 0
     box[x][y]['age'] = 0
@@ -284,7 +326,18 @@ def naissance(boite, x, y, coordonnees):
     box[x][y]['taux_de_croissance'] = taux
     box[x][y]['capa_de_repro'] = 0
     box[x][y]['nb_action'] = 1
-    #box[x][y] = {"x" : x, "y": y, "contenu" : bact_type,"dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : box[new_x][new_y]['taux_de_croissance'], "capa_de_repro" : 0, "nb_action" : 1} ##laisse une nouvelle bactérie après s'être déplacée
+    #affiche la nouvelle bact
+    x0 = str(x) + 'm'
+    y0 = str(y) + 'm'
+    x1 = str(x + 1) + 'm'
+    y1 = str(y + 1) + 'm'
+    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
+    """#afficher la nouvelle pos
+    x0 = str(new_x) + 'm'
+    y0 = str(new_y) + 'm'
+    x1 = str(new_x + 1) + 'm'
+    y1 = str(new_y + 1) + 'm'
+    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")"""
     return box
 
 def pos_alea_antibio(boite):
@@ -301,7 +354,7 @@ def remplace_par_antibio_si_non_resis(boite, x, y):
         box[x][y]['age'] = 0
     return box
 
-def ajout_antibio(boite, coordonnees):
+def ajout_antibio(boite, coordonnees, canvas):
     """je suppose qu'on prend 100 * 100 en format de boite pour faire l'echelle de la goute"""
     box = boite
     x, y = coordonnees
@@ -309,6 +362,11 @@ def ajout_antibio(boite, coordonnees):
         for j in range(-4, 5):
             if distance_parcours(x, y, x + i, y + j) <= 5 and ( ( (i != -1) or (i != 1) ) and ( (j != -4) or (j != 4) ) ):
                 box = remplace_par_antibio_si_non_resis(box, x + i, y + j)
+                x0 = str(i) + 'm'
+                y0 = str(j) + 'm'
+                x1 = str(i + 1) + 'm'
+                y1 = str(j + 1) + 'm'
+                canvas.create_rectangle(x0 , y0, x1, y1, width = 0, fill = "blue")
     return box
 
 def evo_age(boite):
@@ -331,7 +389,7 @@ def evo_capa_de_reprod(boite):
                 box[i][j]['capa_de_repro']+=0.1
     return box
 
-def death_verif_and_apply(boite):
+def death_verif_and_apply(boite, canvas):
     box = boite
     for i in range(0, len(box)):
         for j in range(0, len(box[0])):
@@ -339,11 +397,11 @@ def death_verif_and_apply(boite):
             age = box[i][j]['age']
             dernier_repas = box[i][j]['dernier_repas']
             if contenu == 2 and age >= lifespawn_antibio:
-                mort_antibio(boite, i, j)
+                mort_antibio(boite, i, j, canvas)
             if contenu == 3 and (age >= lifespawn_bact1 or dernier_repas >= lifespawn_sans_nourriture_bact1):
-                box = mort_bacterie(box, i, j)
+                box = mort_bacterie(box, i, j, canvas)
             if contenu == 4 and (age >= lifespawn_bact2 or dernier_repas >= lifespawn_sans_nourriture_bact2):
-                box = mort_bacterie(box, i, j)
+                box = mort_bacterie(box, i, j, canvas)
     return box
 
 def reset_nb_action(boite):
@@ -378,14 +436,21 @@ def pos_alea_nourriture(boite, demi_cote):
     liste = coo_vide_nourriture(boite, demi_cote)
     return liste[random.choice(range(0, len(liste)))]
 
-def ajout_nourriture(boite, demi_cote, coordonnees):
+def ajout_nourriture(boite, demi_cote, coordonnees, canvas):
     box = boite
     x, y = coordonnees
     for i in range(-demi_cote, demi_cote + 1):
         for j in range(-demi_cote, demi_cote + 1):
-            case = box[x + i][y + j]
+            a = x + i
+            b = y + j
+            case = box[a][b]
             if case["contenu"] == 0:
-                box[x + i][y + j] = {"x" : x + i, "y": y + j, "contenu" : 1, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+                box[a][b] = {"x" : a, "y": b, "contenu" : 1, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+                x0 = str(a) + 'm'
+                y0 = str(b) + 'm'
+                x1 = str(a + 1) + 'm'
+                y1 = str(b + 1) + 'm'
+                canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "green")
     return box
 
 
@@ -398,6 +463,10 @@ def convert_to_array(boite):
             temp.append(boite[i][j]['contenu'])
         res.append(temp)
     return np.array(res)
+
+"""def convert_for_tkinter(boite):
+    res = []
+    for i in range(0, 49):"""
 
 def plot_boite(boite):
     box = boite
@@ -435,29 +504,30 @@ def nombre_nourriture_antibio(boite):
                 res["Antibio"]+=1
     return res
 ###Je laisse tout de même cette fonction pour la reprendre au cas où la nouvelle ne correspond pas à ce dont on a besoin
-#def affiche_courbes(iter_max):
-#    temp = 25
-#    ph = 7
-#    cmpt = 0
-#    nb_bacterie = 0
-#    f_antibio = 25
-#    f_nourriture = 20
-#    demi_cote = 5
-#    debut_ajout = 10
-#    box = init_boite(100)
-#    lsy_nb_bacterie = [0,10,20,30,40,50,60,70,80,90,100,110]
-#    lsx_taille = []
-#    lsx = []
-#    while cmpt < iter_max and continuer(box):
-#        box = tour(box)
-#        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
-#        lsy_nb_bacterie.append(nombre_individus(box))
-#        lsx_taille.append(cmpt)
-#        cmpt+=1
-#    plt.plot(lsx_taille,'bo',lsy_nb_bacterie)
-#    plt.ylabel("Nombre d'entités")
-#    plt.xlabel("Nombre d'itérations")
-#    plt.show()
+"""def affiche_courbes(iter_max):
+     temp = 25
+    ph = 7
+    cmpt = 0
+    nb_bacterie = 0
+    f_antibio = 25
+    f_nourriture = 20
+    demi_cote = 5
+    debut_ajout = 10
+    box = init_boite(100)
+    lsy_nb_bacterie = [0,10,20,30,40,50,60,70,80,90,100,110]
+    lsx_taille = []
+    lsx = []
+    while cmpt < iter_max and continuer(box):
+        box = tour(box)
+        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
+        lsy_nb_bacterie.append(nombre_individus(box))
+        lsx_taille.append(cmpt)
+        cmpt+=1
+    plt.plot(lsx_taille,'bo',lsy_nb_bacterie)
+    plt.ylabel("Nombre d'entités")
+    plt.xlabel("Nombre d'itérations")
+    plt.show()
+"""
 
 def affiche_courbes(iter_max):
     x = np.linspace(0, iter_max, iter_max)
@@ -488,7 +558,7 @@ def continuer(boite):
         return False
     return True
 
-def tour(boite):
+def tour(boite, canvas):
     box = boite
     for i in range(0, len(box)):
         for j in range(0, len(box[0])):
@@ -496,39 +566,39 @@ def tour(boite):
                 dest = choix_deplacement(box, i, j, 1)
                 case = box[i][j]
                 if case['age'] >= 1 and case['capa_de_repro'] >= (1 - case['taux_de_croissance']):
-                    box = naissance(box, i, j, dest)
+                    box = naissance(box, i, j, dest, canvas)
                 else:
-                    box = deplacement(box, i, j, dest)
+                    box = deplacement(box, i, j, dest, canvas)
     box = evo_age(box)
-    box = death_verif_and_apply(box)
+    box = death_verif_and_apply(box, canvas)
     box = evo_capa_de_reprod(box)
     box = reset_nb_action(box)
     return box
 
-def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout):
+def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas):
     box = boite
-    if n_iter >= debut_ajout and n_iter % f_antibio == 0:
-        box = ajout_antibio(boite, pos_alea_antibio(box))
-    if n_iter >= debut_ajout and n_iter % f_nourriture == 0 and coo_vide_nourriture(box, demi_cote) != []:
-        box = ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote))
-        plot_boite(box)
+    if  f_antibio != 0 and n_iter >= debut_ajout and n_iter % f_antibio == 0:
+        box = ajout_antibio(boite, pos_alea_antibio(box), canvas)
+    if  f_nourriture != 0 and n_iter >= debut_ajout and n_iter % f_nourriture == 0 and coo_vide_nourriture(box, demi_cote) != []:
+        box = ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote), canvas)
+        #plot_boite(box)
     return box
 
 def structure_bacterio(iter_max, canvas):
     res_bac = dict()
     res_autres = dict()
-    temp = 25
+    """temp = 25
     ph = 7
-    box = init_boite(500)
-    init_pos_bact(box, init_bact1(1, ph, 8, temp, 30))
-    cmpt = 0
     f_antibio = 25
     f_nourriture = 20
-    demi_cote = 5
+    demi_cote = 5"""
+    box = init_boite(100)
+    init_pos_bact(box, init_bact1(1, ph, 8, temp, 30), canvas)
+    cmpt = 0
     debut_ajout = 10
     while cmpt < iter_max and continuer(box):
-        box = tour(box)
-        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
+        box = tour(box, canvas)
+        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas)
         cmpt+=1
 
         ##On sauvegarde les données de la boîte à la cmpt_ième itération
@@ -540,17 +610,14 @@ def structure_bacterio(iter_max, canvas):
         nb_antibio.append(res_autres["Antibio"])
         nb_total_bacteries.append(nb_bacterie1[-1] + nb_bacterie2[-1])
 
-        bouge_canvas(box, canvas)
+        #bouge_canvas(box, canvas)
         canvas.pack()
-        time.sleep(0.5)
     #affiche_courbes(iter_max)
     return None
 
 ###Fenetre Tkinter
 
 def affichage():
-
-    iter_max = 10
 
     fenetre = Tk()
 
@@ -583,62 +650,183 @@ def affichage():
 
     #Frame1
     Label(Frame1, text="Veuillez choisir les paramètres de la premiere bactérie").pack(padx=15, pady = 18)
-    Scale(Frame1, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal').pack()
-    Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie').pack()
-    Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger').pack()
-    Scale(Frame1, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale').pack()
-    Scale(Frame1, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal').pack()
+    taux1 = Scale(Frame1, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
+    taux1.pack()
+    taux1.set(0.5)
+
+    vie1 = Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie')
+    vie1.pack()
+    vie1.set(25)
+
+    vie1_bis = Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
+    vie1_bis.pack()
+    vie1_bis.set(25)
+
+    t1 = Scale(Frame1, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale')
+    t1.pack()
+    t1.set(25)
+
+    Ph1 = Scale(Frame1, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal')
+    Ph1.pack()
+    Ph1.set(7.0)
 
     #Frame 2
-    bouton = Checkbutton(Frame2, text="Deux bacteries ?")
-    bouton.pack()
-    Checkbutton(Frame2, text = "Symbiose ?").pack(padx = 0, pady = 0)
-    Scale(Frame2, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal').pack()
-    Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie').pack()
-    Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger').pack()
-    Scale(Frame2, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale').pack()
-    Scale(Frame2, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal').pack()
+    double = IntVar()
+    double_chk = Checkbutton(Frame2, text="Deux bacteries ?", variable = double)
+    double_chk.pack()
+
+    symb = IntVar()
+    symb_chk = Checkbutton(Frame2, text = "Symbiose ?", variable = symb)
+    symb_chk.pack(padx = 0, pady = 0)
+
+    taux2 = Scale(Frame2, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
+    taux2.pack()
+    taux2.set(0.5)
+
+    vie2 = Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie')
+    vie2.pack()
+    vie2.set(25)
+
+    vie2_bis = Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
+    vie2_bis.pack()
+    vie2_bis.set(25)
+
+    t2 = Scale(Frame2, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale')
+    t2.pack()
+    t2.set(25)
+
+    Ph2 = Scale(Frame2, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal')
+    Ph2.pack()
+    Ph2.set(7.0)
+
 
     #Frame4
     Label(Frame4, text ="Veuillez choisir les parametres à appliquer sur la boite").pack(padx = 10, pady = 18)
-    Scale(Frame4, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température de la boite').pack()
-    Scale(Frame4, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH de la boite').pack()
-    Scale(Frame4, orient='horizontal', from_=1, to=100, resolution=5, tickinterval=10, length=350, label='Ajout de nourriture tous les X tours').pack()
-    Scale(Frame4, orient='horizontal', from_=0, to=20, resolution=1, tickinterval=2, length=350, label='Quantité de nourriture').pack()
-    Scale(Frame4, orient = 'horizontal', from_ = 0, to = 100, resolution=5, tickinterval=10, length=350, label="Ajout d'antibiotique tous les X tours").pack()
+
+    t = Scale(Frame4, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température de la boite')
+    t.pack()
+    t.set(25)
+
+    Ph = Scale(Frame4, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH de la boite')
+    Ph.pack()
+    Ph.set(7.0)
+
+    nour = Scale(Frame4, orient='horizontal', from_=0, to=100, resolution=5, tickinterval=10, length=350, label="Ajout de nourriture tous les X tours (0 = pas d'ajout)")
+    nour.pack()
+    nour.set(30)
+
+    Qnour = Scale(Frame4, orient='horizontal', from_=1, to=20, resolution=1, tickinterval=2, length=350, label='Quantité de nourriture')
+    Qnour.pack()
+    Qnour.set(15)
+
+    antib = Scale(Frame4, orient = 'horizontal', from_ = 0, to = 100, resolution=5, tickinterval=10, length=350, label="Ajout d'antibiotique tous les X tours (0 = pas d'ajout)")
+    antib.pack()
+    antib.set(35)
+
+    vie_antib = Scale(Frame4, orient ="horizontal", from_= 0, to = 100, resolution = 5, tickinterval = 10, length=350, label ="Durée de 'vie' de l'antibiotique")
+    vie_antib.pack()
+    vie_antib.set(20)
+
+    Label(Frame4, text = "Nombre maximal d'itérations").pack()
+    iter = StringVar()
+    iter_ent = Entry(Frame4, textvariable = iter)
+    iter_ent.pack()
+    iter.set("20")
 
     #Frame3
-    canvas = Canvas(Frame3, width=500, height=500, background='black')
+    canvas = Canvas(Frame3, width="99m", height="99m", background='black')
     canvas.pack()
+    canvas = init_canvas(canvas)
+    globals()["canvas"] = canvas
 
-    canvas, ls = init_canvas(canvas)
-    #canvas.pack()
+    #Boutons pour lancer la simulation
+    globall(vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, symb, symb_chk, t, Ph, nour, Qnour, antib, iter, iter_ent)
 
-    print(ls)
+    recup_valeur = Button(Frame1, text="Récupère les valeurs inscrites", command = getall)
+    recup_valeur.pack(side = "bottom")
 
-
-    ###Bouton pour lancer la simulation
-    launcher = Button(Frame2, text="Lancer la simulation")
+    launcher = Button(Frame2, text="Lancer la simulation", command = lancer)
     launcher.pack(side="bottom")
 
-    fenetre.mainloop()
+    reseteur = Button(Frame3, text ="Reset boite", command = reset)
+    reseteur.pack(side = "bottom")
 
+    fenetre.mainloop()
+    return None
+
+def reset():
+    init_canvas(canvas)
+    return None
+
+def lancer():
+    if type(iter_max) == int and iter_max > 0:
+        structure_bacterio(iter_max, canvas)
+    else:
+        showerror("Erreur", "Veuillez vérifier les saisies et recliquer sur le bouton en bas à gauche de la fenêtre")
+    return None
+
+
+def globall(vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, symb, symb_chk, t, Ph, nour, Qnour, antib, iter, iter_ent):
+    globals()["vie1"] = vie1
+    globals()["vie2"] = vie2
+    globals()["vie1_bis"] = vie1_bis
+    globals()["vie2_bis"] = vie2_bis
+    globals()["vie_antib"] = vie_antib
+    globals()["t1"] = t1
+    globals()["t2"] = t2
+    globals()["Ph1"] = Ph1
+    globals()["Ph2"] = Ph2
+    globals()["double"] = double
+    globals()["double_chk"] = double_chk
+    globals()["symb"] = symb
+    globals()["symb_chk"] = symb_chk
+    globals()["t"] = t
+    globals()["Ph"] = Ph
+    globals()["nour"] = nour
+    globals()["Qnour"] = Qnour
+    globals()["antib"] = antib
+    globals()["iter"] = iter
+    globals()["iter_ent"] = iter_ent
+    return None
+
+def getall():
+    globals()["lifespawn_bact1"] = vie1.get()
+    globals()["lifespawn_bact2"] = vie2.get()
+    globals()["lifespawn_sans_nourriture_bact1"] = vie1_bis.get()
+    globals()["lifespawn_sans_nourriture_bact2"] = vie2_bis.get()
+    globals()["lifespawn_antibio"] = vie_antib.get()
+    globals()["temp1"] = t1.get()
+    globals()["temp2"] = t2.get()
+    globals()["ph1"] = Ph1.get()
+    globals()["ph2"] = Ph2.get()
+    globals()["deux_bact"] = double.get() #Renvoie 1 si cochée 0 sinon
+    globals()["symbiose"] = symb.get() #Renvoie 1 si cochée 0 sinon
+    globals()["temp"] = t.get()
+    globals()["ph"] = Ph.get()
+    globals()["f_nourriture"] = nour.get()
+    globals()["demi_cote"] = Qnour.get()
+    globals()["f_antibio"] = antib.get()
+    globals()["iter_max"] = int(iter.get())
+    return None
 
 
 def init_canvas(canvas):
-    ls = []
-    for i in range(0, 502):
-        for j in range(0, 502):
-            temp = canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "grey")
-            ls.append(temp)
-    return (canvas, ls)
+    #ls = []
+    for i in range(0, 100):
+        for j in range(0, 100):
+            x0 = str(i) + 'm'
+            y0 = str(j) + 'm'
+            x1 = str(i + 1) + 'm'
+            y1 = str(j + 1) + 'm'
+            temp = canvas.create_rectangle(x0, y0, x1, y1, width = "0m", fill = "green")
+            #ls.append(temp)
+    return canvas
 
 def bouge_canvas(box, canvas):
     arr = convert_to_array(box)
     for i in range(0, len(arr)):
         for j in range(0, len(arr[0])):
             contenu = arr[i][j]
-            #canvas.coords(i, j, 1000, 1000)
             if contenu == 0:
                 canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "white")
             if contenu == 1:
@@ -649,4 +837,3 @@ def bouge_canvas(box, canvas):
                 canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "red")
             if contenu == 4:
                 canvas.create_rectangle(i, j, i + 1, j + 1, width = 0, fill = "orange")
-    return canvas
