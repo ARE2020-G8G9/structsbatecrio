@@ -47,7 +47,7 @@ Liste de l'ensemble des ressources bibliographiques utilisées pour vos travaux.
 
 [4] Cornu, Marie, et Philippe Rosset. « Appréciation quantitative de la croissance bactérienne potentielle à partir de profils temps-température - Exemples d’application pour la croissance de Salmonella Typhimurium dans un steak haché ». Bulletin de l’Académie Vétérinaire de France, vol. 157, no 1, 2004, p. 93‑100.
 
-[5] CRETENET, Marina, et al. « Etude des interactions entre staphylococcus aureus et lactococcus lactis en matrice fromagère ». SYMPOSTAPH, 2010, p. np. HAL ArchivesOuvertes, <a href:"https://hal.archives-ouvertes.fr/hal-01454348."> lien de l'archive[5] </a>
+[5] CRETENET, Marina, et al. « Etude des interactions entre staphylococcus aureus et lactococcus lactis en matrice fromagère ». SYMPOSTAPH, 2010, p. np. HAL ArchivesOuvertes, <a href:"https://hal.archives-ouvertes.fr/hal-01454348"> lien de l'archive[5] </a>
 
 [6] Krasovec, Marc. Estimation of mutation rates : implications for diversification and evolution of eukaryotic phytoplankton. Université Pierre et Marie Curie - Paris VI, octobre 2016. HAL Archives Ouvertes, <a href="https://tel.archives-ouvertes.fr/tel-01647210."> lien de l'archive[6] </a>
 
