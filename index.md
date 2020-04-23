@@ -28,6 +28,7 @@ Un titre et un résumé en anglais qui reprennent le titre et le résumé en fra
 ## Présentation structurée des résultats
 
 Nous avons décidé de choisir le modèle exponentielle afin d'étudier la structure de colonisation d'une boîte de pétri par une ou des bactérie(s):
+
 (Présentation du choix de modélisation, des outils, du code et des résultats (tableaux, courbes, animations...)) (**avec une analyse critique**).
 
 ## Lien vers page de blog : <a href="blog.html"> C'est ici ! </a>
