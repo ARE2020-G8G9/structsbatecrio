@@ -53,7 +53,7 @@ Liste de l'ensemble des ressources bibliographiques utilisées pour vos travaux.
 
 [7] « Spontaneous Mutation Rate in the Smallest Photosynthetic Eukaryotes ». Molecular Biology and Evolution, vol. 34, no 7, 2017, p. 1770‑79. HAL Archives Ouvertes,doi:10.1093/molbev/msx119.
 
-[8] [Auteurs inconnus] « Résistance aux antibiotiques ». Institut Pasteur, 24 avril 2017,dernière mise à jour : septembre 2019,<a href="https://www.pasteur.fr/fr/centre-medical/fiches-maladies/resistance-aux-antibiotiques."> lien de la ressource </a>
+[8] [Auteurs inconnus] « Résistance aux antibiotiques ». Institut Pasteur, 24 avril 2017,dernière mise à jour : septembre 2019,<a href="https://www.pasteur.fr/fr/centre-medical/fiches-maladies/resistance-aux-antibiotiques."> lien de la ressource[8] </a>
 
 [9] Rosset, Philippe, et al. « Intégration des profils temps-température et appréciation de la croissance bactérienne ». Revue Générale du Froid, no 1038, novembre 2003, p. 27‑34.
 
