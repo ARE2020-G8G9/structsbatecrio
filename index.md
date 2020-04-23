@@ -1,4 +1,4 @@
-# Nom du projet
+# Croissance bactériologique et structure de colonisation du milieu
 
 Résumé de quelques lignes présentant l'objectif de votre projet, la méthode que vous avez suivie pour le réaliser et les résultats marquants que vous avez obtenus.
 
@@ -10,18 +10,18 @@ Un titre et un résumé en anglais qui reprennent le titre et le résumé en fra
 
 |(´・ω・｀)| ( ͡° ͜ʖ ͡°) | ಠ_ಠ | ᕕ( ᐛ )ᕗ |
 |-----|--|--|--|
-| P. Bismuth| J. Doe | A. Onyme  | N. Nescio  |
+| Kurdyk Louis| Martin Amaury | Rosenthal Massyl  | Corlue Florian |
 
 
 ## Description synthétique du projet
 
-**Problématique :** 
+**Problématique :** Comment vont s'organiser une ou plusieurs bactéries afin de coloniser un milieu ?
 
-**Hypothèse principale :**
+**Hypothèse principale :** Les bactéries cherchent à coloniser et dominer la totalité de leur milieu tant qu’elles y trouvent de la nourriture.
 
-**Hypothèses secondaires :** 
+**Hypothèses secondaires :** En absence d'antibiotique, les différentes populations auront plus tendance à rentrer en concurrence qu’en symbiose, et inversement en présence d’antibiotiques.
 
-**Objectifs :**
+**Objectifs :** Déterminer la vitesse de colonisation du milieu par une bactérie en fonction de plusieurs critères (ph, température, vitesse de division, taux de mutations...).
 
 **Critère(s) d'évaluation :**
 
@@ -33,6 +33,6 @@ Présentation du choix de modélisation, des outils, du code et des résultats (
 
 ## Bibliographie :
 
-**Carte mentale de vos mots-clés, en utilisant** <a href="https://framindmap.org/mindmaps/index.html">Framindmap </a> 
+**Carte mentale présentant nos différentes idées** <a href="https://cdn.discordapp.com/attachments/690215408917282943/694206338603155466/Mindmap.jpg">Framindmap </a> 
 
 Liste de l'ensemble des ressources bibliographiques utilisées pour vos travaux. **<= Indiquez le canal utilisé pour les trouver (Google Scholar, sources wikipedia, ressources en ligne SU, ...)**
