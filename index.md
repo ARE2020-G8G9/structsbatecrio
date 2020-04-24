@@ -1,16 +1,20 @@
 # Croissance bactériologique et structure de colonisation du milieu
 
 Résumé de quelques lignes présentant l'objectif de votre projet, la méthode que vous avez suivie pour le réaliser et les résultats marquants que vous avez obtenus.
+L'objectif de ce projet est de visualiser les structures visibles lors de la colonisation d'une boite de pétri par une ou deux bactéries et de voir comment certains paramètres peuvent modifier ces structures.
+Pour ce faire nous avons réaliser une simulation par Python et un affichage par Tkinter afin d'observer les structures tout en modifiant certain paramètres via une interface pratique.
 
-## English version
+## English version: Bacteriological growth and environmental colonization structure
 
 Un titre et un résumé en anglais qui reprennent le titre et le résumé en français, mais en anglais pour attirer une audience internationale sur vos travaux !
+The goal of this project is to visualize the structures visible during the colonization of a petri box by one or two bacteria and to see how certain parameters can modify these structures.
+To do this, we performed a simulation by Python and a display by Tkinter in order to observe the structures while modifying certain parameters via a practical interface.
 
 ## Présentation de l'équipe
 
 |(´・ω・｀)| ( ͡° ͜ʖ ͡°) | ಠ_ಠ | ᕕ( ᐛ )ᕗ |
 |-----|--|--|--|
-| Kurdyk Louis| Martin Amaury | Rosenthal Massyl  | Corlue Florian |
+| Kurdyk Louis| Martin Amaury | Rosenthal Massyl ? (il l'enlèvera comme preuve qu'il a au moins travaillé une minute) | Corlue Florian |
 
 
 ## Description synthétique du projet
