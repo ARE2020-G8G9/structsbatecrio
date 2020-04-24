@@ -60,14 +60,16 @@ def nombre_nourriture_antibio(boite):
 """
 
 def affiche_courbes(iter_max, b1, b2, n, a, t_b, v):
-    x = np.linspace(0, iter_max, iter_max)
-    temp = 25
+    #x = np.linspace(0, iter_max, num=iter_max)
+    x = [i for i in range (0, iter_max + 1)]
+    #Variables globales
+    """temp = 25
     ph = 7
     cmpt = 0
     nb_bacterie = 0
     f_antibio = 25
     f_nourriture = 20
-    demi_cote = 5
+    demi_cote = 5"""
 
     plt.plot(x, b1, label = 'souche1')
     plt.plot(x, b2, label = 'souche2')

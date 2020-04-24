@@ -440,7 +440,7 @@ def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas
     box = boite
     if  f_antibio != 0 and n_iter >= debut_ajout and n_iter % f_antibio == 0:
         box = ajout_antibio(boite, pos_alea_antibio(box), canvas)
-        disp.plot_boite(box)
+        #disp.plot_boite(box)
     if  f_nourriture != 0 and n_iter >= debut_ajout and n_iter % f_nourriture == 0 and coo_vide_nourriture(box, demi_cote) != []:
         box = ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote), canvas)
         #disp.plot_boite(box)
@@ -449,6 +449,12 @@ def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas
 def structure_bacterio(iter_max, canvas):
     res_bac = dict()
     res_autres = dict()
+    nb_bacterie1 = []
+    nb_bacterie2 = []
+    nb_nourriture = []
+    nb_antibio = []
+    nb_total_bacteries = []
+    nb_vides = []
     box = ins.init_boite(100)
     box = ins.init_pos_bact(box, ins.init_bact(1, taux1, ph, ph1, temp, temp1), canvas)
     if deux_bact == 1:
@@ -456,7 +462,6 @@ def structure_bacterio(iter_max, canvas):
     cmpt = 0
     debut_ajout = 10
     while cmpt <= iter_max and continuer(box):
-        print(cmpt)
         box = tour(box, canvas)
         box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas)
         cmpt+=1
@@ -474,7 +479,7 @@ def structure_bacterio(iter_max, canvas):
         #bouge_canvas(box, canvas)
         #canvas.pack()
         #disp.plot_boite(box)
-    #stats.affiche_courbes(iter_max, nb_bacterie1, nb_bacterie2, nb_nourriture, nb_antibio, nb_total_bacteries, nb_vides)
+    stats.affiche_courbes(iter_max, nb_bacterie1, nb_bacterie2, nb_nourriture, nb_antibio, nb_total_bacteries, nb_vides)
     return None
 
 ###Fenetre Tkinter
@@ -595,6 +600,8 @@ def affichage():
     canvas.pack()
     canvas = init_canvas(canvas)
     globals()["canvas"] = canvas
+
+    Label(Frame3, text="L'optimisation n'étant pas exceptionnelle,\n le temps de calcul peut être long pour des grands nombres d'itérations").pack(pady = 50)
 
     #Boutons pour lancer la simulation
     globall(taux1_scl, taux2_scl, vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, t, Ph, nour, Qnour, antib, iter, iter_ent)
