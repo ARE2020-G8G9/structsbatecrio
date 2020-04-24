@@ -1,9 +1,8 @@
-
 #NE JAMAIS UTILISER CES DICO POUR REMPLACER LE CONTENU D'UNE CASE ! JAMAIS
-dict_ex = {"x" : 0, "y": 0, "contenu" : 1, "dernier_repas" : 0, "age" : -1, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 0}
-case_nourriture = {"x" : 0, "y": 0, "contenu" : 1, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
-case_vide = {"x" : 0, "y": 0, "contenu" : 0, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
-case_antibio = {"x" : 0, "y": 0, "contenu" : 2, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+dict_ex = {"souche" : 0, "x" : 0, "y": 0, "contenu" : 1, "dernier_repas" : 0, "age" : -1, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 0}
+case_nourriture = {"souche" : 0, "x" : 0, "y": 0, "contenu" : 1, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+case_vide = {"souche" : 0, "x" : 0, "y": 0, "contenu" : 0, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+case_antibio = {"souche" : 0, "x" : 0, "y": 0, "contenu" : 2, "dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
 
 ###Initialisation des tableaux contenant les données de la boîte en fonction du nombre d'itérations:
 nb_vides = []
@@ -22,6 +21,9 @@ import math
 import random
 import numpy as np
 from matplotlib import pyplot as plt
+import inits as ins
+import displays as disp
+import stats
 
 def pause0():
     programPause = input("Press the <ENTER> key to continue...")
@@ -45,77 +47,6 @@ f_nourriture = 20
 quantite = 0
 f_antibio = 20
 iter_max = 100"""
-
-###initialisation des paramètres et bacteries
-
-#widget ph_opt, temp_opt, taux de croissance optimal... enfin tous les parametres mis en demande a l'utilisateur pour deux bacteries donc on indice les valeur par le type 1 ou 2 de la bacterie (ex : ph_opt2) sauf pour la temperature de la boite notee temp et son ph note ph qui prennent d'autres curseurs
-
-def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
-    if temp_opt <= 20:
-        tmin = 0
-        tmax = 20
-    if temp_opt > 20 and temp_opt < 45:
-        tmin = 20
-        tmax = 45
-    if temp_opt >= 45:
-        tmin = 45
-        tmax = 70
-    taux_temp = ((temp - tmax)*(temp - tmin)**2) / ((temp_opt - tmin) * (temp_opt - tmin)*(temp - temp_opt) - (temp_opt - tmax)*(temp_opt + tmin - 2*temp))
-    if ph_opt <= 6:
-        ph_min = 1
-        ph_max = 6
-    if ph_opt > 6 and ph_opt <= 8:
-        ph_min = 6
-        ph_max = 8
-    if ph_opt > 8:
-        ph_min = 7
-        ph_max = 11.5
-    a = ph - ph_min
-    b = ph - ph_max
-    c = ph - ph_opt
-    taux_ph = a * b / ( a * b - c**2 )
-    return taux_opt * taux_temp * taux_ph
-
-def init_bact1(taux_opt1, ph, ph_opt1, temp, temp_opt1):
-    return {'x' : 0, 'y' : 0, 'contenu' : 3,'dernier repas' : 0, 'age' : 0, 'resistance' : 0, 'taux_de_croissance' : taux_de_croissance_effectif(taux_opt1, ph, ph_opt1, temp, temp_opt1), 'capa_de_repro' : 0, 'nb_action' : 0}
-
-def init_bact2(taux_opt2, ph, ph_opt2, temp, temp_opt2):
-    return {'x' : 0, 'y' : 0, 'contenu' : 4,'dernier_repas' : 0, 'age' : 0, 'resistance' : 0, 'taux_de_croissance' : taux_de_croissance_effectif(taux_opt2, ph, ph_opt2, temp, temp_opt2), 'capa_de_repro' : 0, 'nb_action' : 0}
-
-def init_bact(num_souche, taux_opt, ph, ph_opt, temp, temp_opt):
-    return {'souche' : num_souche, 'x' : 0, 'y' : 0, 'contenu' : 4,'dernier_repas' : 0, 'age' : 0, 'resistance' : 0, 'taux_de_croissance' : taux_de_croissance_effectif(taux_opt2, ph, ph_opt, temp, temp_opt), 'capa_de_repro' : 0, 'nb_action' : 0}
-
-###Initialisation de la boite
-def coo(x, y):
-    return {'x' : x, 'y' : y, 'contenu' : 1,'dernier_repas' : 0, 'age' : 0, 'resistance' : -1, 'taux_de_croissance' : 0, 'capa_de_repro' : 0, 'nb_action' : 0}
-
-def L_dico(k, L):
-    res = []
-    for i in range(0, L):
-        res.append(coo(k, i))
-    return res
-
-def init_boite(L):
-    res = []
-    for i in range(0,L):
-        res.append(L_dico(i, L))
-    return res
-
-def pos_alea(boite):
-    L = len(boite);
-    l = len(boite[0])
-    return (random.choice(range(0, L)), random.choice(range(0, l)))
-
-def init_pos_bact(boite, bact, canvas):
-    box = boite
-    x, y = pos_alea(boite)
-    box[x][y] = bact
-    x0 = str(x) + 'm'
-    y0 = str(y) + 'm'
-    x1 = str(x + 1) + 'm'
-    y1 = str(y +1) + 'm'
-    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
-    return box
 
 ###Trouver le voisinage (à tester avec le dico)(semble marcher quand meme)
 
@@ -300,12 +231,12 @@ def voisinage_direct_libre(boite, x, y):
     res = []
     for i in range(0, len(voisinage0)):
         case = voisinage0[i]
-        if distance_parcours(x, y, case["x"], case['y']) == 1 and ( (case['contenu'] == 0 or case['contenu'] == 1) or (boite[x][y]['resistance'] != -1 and case['contenu'] == 2) ):
+        if mn.distance_parcours(x, y, case["x"], case['y']) == 1 and ( (case['contenu'] == 0 or case['contenu'] == 1) or (boite[x][y]['resistance'] != -1 and case['contenu'] == 2) ):
             res.append(case)
     return res
 
 def choix_deplacement(boite, x, y, taille):
-    if deplacement_possible(boite, x, y):
+    if mn.deplacement_possible(boite, x, y):
         box = boite
         voisi = voisinage_direct_libre(box, x ,y)
         choix = voisi[random.choice(range(0, len(voisi)))]
@@ -344,7 +275,7 @@ def naissance(boite, x, y, coordonnees, canvas):
     return box
 
 def pos_alea_antibio(boite):
-    #la goute est de hauteur et largeur max 9
+    #la goutte est de hauteur et largeur max 9
     intervalle = range(0,len(boite) - 9)
     x = random.choice(intervalle)
     y = random.choice(intervalle)
@@ -456,104 +387,6 @@ def ajout_nourriture(boite, demi_cote, coordonnees, canvas):
                 canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "green")
     return box
 
-
-### Affichage
-def convert_to_array(boite):
-    res = []
-    for i in range(0, len(boite)):
-        temp = []
-        for j in range(0, len(boite[0])):
-            temp.append(boite[i][j]['contenu'])
-        res.append(temp)
-    return np.array(res)
-
-"""def convert_for_tkinter(boite):
-    res = []
-    for i in range(0, 49):"""
-
-def plot_boite(boite):
-    box = boite
-    A = convert_to_array(box)
-    plt.figure(figsize=(15,12)) # (30,30) = Taille de la figure
-    plt.imshow(A,cmap='viridis')
-    plt.colorbar()
-    plt.tick_params(top=False, bottom=False, right=False, left=False, labelleft=False, labelbottom=False)
-    plt.show()
-
-
-### Statistiques
-#pas mal de fonctions proches des stats de Schelling
-def nombre_individus(boite):
-    res = {"Bacterie1" : 0, "Bacterie2" : 0}
-    for i in range(0, len(boite)):
-        for j in range(0, len(boite[0])):
-            contenu = boite[i][j]['contenu']
-            if contenu == 3:
-                res["Bacterie1"]+=1
-            if contenu == 4:
-                res["Bacterie2"]+=1
-    return res
-
-def nombre_nourriture_antibio(boite):
-    res = {"Vide" : 0, "Nourriture" : 0, "Antibio" : 0}
-    for i in range(0, len(boite)):
-        for j in range(0, len(boite[0])):
-            contenu = boite[i][j]['contenu']
-            if contenu == 0:
-                res["Vide"]+=1
-            if contenu == 1:
-                res["Nourriture"]+=1
-            if contenu == 2:
-                res["Antibio"]+=1
-    return res
-###Je laisse tout de même cette fonction pour la reprendre au cas où la nouvelle ne correspond pas à ce dont on a besoin
-"""def affiche_courbes(iter_max):
-     temp = 25
-    ph = 7
-    cmpt = 0
-    nb_bacterie = 0
-    f_antibio = 25
-    f_nourriture = 20
-    demi_cote = 5
-    debut_ajout = 10
-    box = init_boite(100)
-    lsy_nb_bacterie = [0,10,20,30,40,50,60,70,80,90,100,110]
-    lsx_taille = []
-    lsx = []
-    while cmpt < iter_max and continuer(box):
-        box = tour(box)
-        box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout)
-        lsy_nb_bacterie.append(nombre_individus(box))
-        lsx_taille.append(cmpt)
-        cmpt+=1
-    plt.plot(lsx_taille,'bo',lsy_nb_bacterie)
-    plt.ylabel("Nombre d'entités")
-    plt.xlabel("Nombre d'itérations")
-    plt.show()
-"""
-
-def affiche_courbes(iter_max):
-    x = np.linspace(0, iter_max, iter_max)
-    temp = 25
-    ph = 7
-    cmpt = 0
-    nb_bacterie = 0
-    f_antibio = 25
-    f_nourriture = 20
-    demi_cote = 5
-
-    plt.plot(x, nb_bacterie1, label = 'souche1')
-    plt.plot(x, nb_bacterie2, label = 'souche2')
-    plt.plot(x, nb_nourriture, label = 'nourriture')
-    plt.plot(x, nb_antibio, label = 'antibio')
-    plt.plot(x, nb_total_bacteries, label = 'total_bacteries')
-
-    plt.ylabel("Nombre d'entités")
-    plt.xlabel("Nombre d'itérations")
-    plt.legend()
-    plt.show()
-
-
 ###Global
 def continuer(boite):
     pop = nombre_individus(boite)
@@ -581,9 +414,9 @@ def tour(boite, canvas):
 def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas):
     box = boite
     if  f_antibio != 0 and n_iter >= debut_ajout and n_iter % f_antibio == 0:
-        box = ajout_antibio(boite, pos_alea_antibio(box), canvas)
+        box = mn.ajout_antibio(boite, pos_alea_antibio(box), canvas)
     if  f_nourriture != 0 and n_iter >= debut_ajout and n_iter % f_nourriture == 0 and coo_vide_nourriture(box, demi_cote) != []:
-        box = ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote), canvas)
+        box = mn.ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote), canvas)
         #plot_boite(box)
     return box
 
@@ -595,8 +428,8 @@ def structure_bacterio(iter_max, canvas):
     f_antibio = 25
     f_nourriture = 20
     demi_cote = 5"""
-    box = init_boite(100)
-    init_pos_bact(box, init_bact1(1, ph, 8, temp, 30), canvas)
+    box = ins.init_boite(10)
+    ins.init_pos_bact(box, ins.init_bact(1, 1, ph, 8, temp, 30), canvas)
     cmpt = 0
     debut_ajout = 10
     while cmpt < iter_max and continuer(box):
@@ -605,17 +438,19 @@ def structure_bacterio(iter_max, canvas):
         cmpt+=1
 
         ##On sauvegarde les données de la boîte à la cmpt_ième itération
-        res_bac = nombre_individus(box)
-        res_autres = nombre_nourriture_antibio(box)
+        res_bac = stats.nombre_individus(box)
+        res_autres = stats.nombre_nourriture_antibio(box)
         nb_bacterie1.append(res_bac["Bacterie1"])
         nb_bacterie2.append(res_bac["Bacterie2"])
         nb_nourriture.append(res_autres["Nourriture"])
         nb_antibio.append(res_autres["Antibio"])
         nb_total_bacteries.append(nb_bacterie1[-1] + nb_bacterie2[-1])
+        nb_vides.append(res_autres["Vide"])
 
         #bouge_canvas(box, canvas)
-        canvas.pack()
-    #affiche_courbes(iter_max)
+        #canvas.pack()
+        disp.plot_boite(box)
+    stats.affiche_courbes(iter_max, nb_bacterie1, nb_bacterie2, nb_nourriture, nb_antibio, nb_total_bacteries, nb_vides)
     return None
 
 ###Fenetre Tkinter
