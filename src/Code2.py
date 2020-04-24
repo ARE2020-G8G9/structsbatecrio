@@ -223,20 +223,26 @@ def deplacement(boite, x, y, coordonnees, canvas):
     y0 = str(new_y) + 'm'
     x1 = str(new_x + 1) + 'm'
     y1 = str(new_y + 1) + 'm'
-    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
+    if box[new_x][new_y]['contenu'] == 3:
+        canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
+    if box[new_x][new_y]['contenu'] == 4:
+        canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "orange")
     return box
 
 def voisinage_direct_libre(boite, x, y):
     voisinage0 = voisinage(boite, x, y, 1)
     res = []
+    contenu = boite[x][y]['contenu']
     for i in range(0, len(voisinage0)):
         case = voisinage0[i]
-        if mn.distance_parcours(x, y, case["x"], case['y']) == 1 and ( (case['contenu'] == 0 or case['contenu'] == 1) or (boite[x][y]['resistance'] != -1 and case['contenu'] == 2) ):
+        if distance_parcours(x, y, case["x"], case['y']) == 1 and (case['contenu'] == 0 or case['contenu'] == 1):
+            res.append(case)
+        if deux_bact == 1 and distance_parcours(x, y, case["x"], case['y']) == 1 and (case['contenu'] != contenu and ( case['contenu'] == 4 or case["contenu"] == 3 )):
             res.append(case)
     return res
 
 def choix_deplacement(boite, x, y, taille):
-    if mn.deplacement_possible(boite, x, y):
+    if deplacement_possible(boite, x, y):
         box = boite
         voisi = voisinage_direct_libre(box, x ,y)
         choix = voisi[random.choice(range(0, len(voisi)))]
@@ -265,13 +271,10 @@ def naissance(boite, x, y, coordonnees, canvas):
     y0 = str(y) + 'm'
     x1 = str(x + 1) + 'm'
     y1 = str(y + 1) + 'm'
-    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
-    """#afficher la nouvelle pos
-    x0 = str(new_x) + 'm'
-    y0 = str(new_y) + 'm'
-    x1 = str(new_x + 1) + 'm'
-    y1 = str(new_y + 1) + 'm'
-    canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")"""
+    if box[new_x][new_y]['contenu'] == 3:
+        canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "red")
+    if box[new_x][new_y]['contenu'] == 4:
+        canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "orange")
     return box
 
 def pos_alea_antibio(boite):
@@ -283,9 +286,13 @@ def pos_alea_antibio(boite):
 
 def remplace_par_antibio_si_non_resis(boite, x, y):
     box = boite
-    if box[x][y]['resistance'] == -1:
-        box[x][y]['contenu'] = 2
-        box[x][y]['age'] = 0
+    box[x][y]['contenu'] = 2
+    box[x][y]['age'] = 0
+    x0 = str(x) + 'm'
+    y0 = str(y) + 'm'
+    x1 = str(x + 1) + 'm'
+    y1 = str(y + 1) + 'm'
+    canvas.create_rectangle(x0 , y0, x1, y1, width = 0, fill = "blue")
     return box
 
 def ajout_antibio(boite, coordonnees, canvas):
@@ -296,11 +303,6 @@ def ajout_antibio(boite, coordonnees, canvas):
         for j in range(-4, 5):
             if distance_parcours(x, y, x + i, y + j) <= 5 and ( ( (i != -1) or (i != 1) ) and ( (j != -4) or (j != 4) ) ):
                 box = remplace_par_antibio_si_non_resis(box, x + i, y + j)
-                x0 = str(i) + 'm'
-                y0 = str(j) + 'm'
-                x1 = str(i + 1) + 'm'
-                y1 = str(j + 1) + 'm'
-                canvas.create_rectangle(x0 , y0, x1, y1, width = 0, fill = "blue")
     return box
 
 def evo_age(boite):
@@ -331,7 +333,7 @@ def death_verif_and_apply(boite, canvas):
             age = box[i][j]['age']
             dernier_repas = box[i][j]['dernier_repas']
             if contenu == 2 and age >= lifespawn_antibio:
-                mort_antibio(boite, i, j, canvas)
+                box = mort_antibio(boite, i, j, canvas)
             if contenu == 3 and (age >= lifespawn_bact1 or dernier_repas >= lifespawn_sans_nourriture_bact1):
                 box = mort_bacterie(box, i, j, canvas)
             if contenu == 4 and (age >= lifespawn_bact2 or dernier_repas >= lifespawn_sans_nourriture_bact2):
@@ -387,9 +389,29 @@ def ajout_nourriture(boite, demi_cote, coordonnees, canvas):
                 canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "green")
     return box
 
+def interact_bact(boite, x, y, coordonnees, canvas):
+    box = boite
+    winner = random.choice(range(0,2))
+    new_x, new_y = coordonnees
+    if winner == 0:
+        box[x][y] = {"x" : x, "y": y, "contenu" : 0,"dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+        x0 = str(x) + 'm'
+        y0 = str(y) + 'm'
+        x1 = str(x + 1) + 'm'
+        y1 = str(y + 1) + 'm'
+        canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "white")
+    else:
+        box[new_x][new_y] = {"x" : x, "y": y, "contenu" : 0,"dernier_repas" : 0, "age" : 0, "resistance" : -1, "taux_de_croissance" : -1, "capa_de_repro" : 0, 'nb_action' : 1}
+        x0 = str(new_x) + 'm'
+        y0 = str(new_y) + 'm'
+        x1 = str(new_x + 1) + 'm'
+        y1 = str(new_y + 1) + 'm'
+        canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "white")
+    return box
+
 ###Global
 def continuer(boite):
-    pop = nombre_individus(boite)
+    pop = stats.nombre_individus(boite)
     if pop["Bacterie1"] + pop["Bacterie2"] == 0:
         return False
     return True
@@ -401,6 +423,9 @@ def tour(boite, canvas):
             if deplacement_possible(box, i, j):
                 dest = choix_deplacement(box, i, j, 1)
                 case = box[i][j]
+                new_x, new_y = dest
+                if box[new_x][new_y]['contenu'] >= 3:
+                    box = interact_bact(box, i, j, dest, canvas)
                 if case['age'] >= 1 and case['capa_de_repro'] >= (1 - case['taux_de_croissance']):
                     box = naissance(box, i, j, dest, canvas)
                 else:
@@ -414,25 +439,24 @@ def tour(boite, canvas):
 def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas):
     box = boite
     if  f_antibio != 0 and n_iter >= debut_ajout and n_iter % f_antibio == 0:
-        box = mn.ajout_antibio(boite, pos_alea_antibio(box), canvas)
+        box = ajout_antibio(boite, pos_alea_antibio(box), canvas)
+        disp.plot_boite(box)
     if  f_nourriture != 0 and n_iter >= debut_ajout and n_iter % f_nourriture == 0 and coo_vide_nourriture(box, demi_cote) != []:
-        box = mn.ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote), canvas)
-        #plot_boite(box)
+        box = ajout_nourriture(box, demi_cote, pos_alea_nourriture(box, demi_cote), canvas)
+        #disp.plot_boite(box)
     return box
 
 def structure_bacterio(iter_max, canvas):
     res_bac = dict()
     res_autres = dict()
-    """temp = 25
-    ph = 7
-    f_antibio = 25
-    f_nourriture = 20
-    demi_cote = 5"""
-    box = ins.init_boite(10)
-    ins.init_pos_bact(box, ins.init_bact(1, 1, ph, 8, temp, 30), canvas)
+    box = ins.init_boite(100)
+    box = ins.init_pos_bact(box, ins.init_bact(1, taux1, ph, ph1, temp, temp1), canvas)
+    if deux_bact == 1:
+        box = ins.init_pos_bact(box, ins.init_bact(2, taux2, ph, ph2, temp, temp2), canvas)
     cmpt = 0
     debut_ajout = 10
-    while cmpt < iter_max and continuer(box):
+    while cmpt <= iter_max and continuer(box):
+        print(cmpt)
         box = tour(box, canvas)
         box = ajout(box, cmpt, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas)
         cmpt+=1
@@ -449,8 +473,8 @@ def structure_bacterio(iter_max, canvas):
 
         #bouge_canvas(box, canvas)
         #canvas.pack()
-        disp.plot_boite(box)
-    stats.affiche_courbes(iter_max, nb_bacterie1, nb_bacterie2, nb_nourriture, nb_antibio, nb_total_bacteries, nb_vides)
+        #disp.plot_boite(box)
+    #stats.affiche_courbes(iter_max, nb_bacterie1, nb_bacterie2, nb_nourriture, nb_antibio, nb_total_bacteries, nb_vides)
     return None
 
 ###Fenetre Tkinter
@@ -459,21 +483,21 @@ def affichage():
 
     fenetre = Tk()
 
-    label = Label(fenetre, text = "Merci d'utiliser notre simulation de croissance bacteriologique")
+    label = Label(fenetre, text = "Merci d'utiliser notre simulation (à l'optimisation douteuse) de croissance bacteriologique")
     label.pack()
 
     #fenetre['bg']='white'
 
     # frame 1 parametres bact1
-    Frame1 = LabelFrame(fenetre, text="Parametres sur la premiere bacterie", padx=20, pady=20)
+    Frame1 = LabelFrame(fenetre, text="Paramètres sur la première bacterie", padx=20, pady=20)
     Frame1.pack(side = LEFT, fill="both", expand="yes")
 
     # frame 2 parametre bact2
-    Frame2 = LabelFrame(fenetre, text="Parametres sur la seconde bacterie", padx=20, pady=20)
+    Frame2 = LabelFrame(fenetre, text="Paramètres sur la seconde bacterie", padx=20, pady=20)
     Frame2.pack(side = LEFT, fill="both", expand="yes")
 
     #Frame 4 parametres de la boite
-    Frame4 = LabelFrame(fenetre, text = "Parametres sur la boite", padx = 20, pady = 20)
+    Frame4 = LabelFrame(fenetre, text = "Paramètres sur la boite", padx = 20, pady = 20)
     Frame4.pack(side = LEFT, fill = "both", expand = "yes")
 
 
@@ -481,24 +505,19 @@ def affichage():
     Frame3 = LabelFrame(fenetre, text="Etat de la boite", padx=20, pady=20)
     Frame3.pack(side = RIGHT, fill="both", expand="yes")
 
-    """Ajout de labels
-    Label(Frame1, text="Parametre sur la premiere bacterie").pack(padx=10, pady=10)
-    Label(Frame2, text="Parametre sur la seconde bacterie").pack(padx=10, pady=10)
-    Label(Frame3, text="Etat de la boite").pack(padx=10, pady=10)"""
-
     #Frame1
     Label(Frame1, text="Veuillez choisir les paramètres de la premiere bactérie").pack(padx=15, pady = 18)
-    taux1 = Scale(Frame1, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
-    taux1.pack()
-    taux1.set(0.5)
+    taux1_scl = Scale(Frame1, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
+    taux1_scl.pack()
+    taux1_scl.set(0.5)
 
-    vie1 = Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie')
+    vie1 = Scale(Frame1, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie')
     vie1.pack()
-    vie1.set(25)
+    vie1.set(10)
 
-    vie1_bis = Scale(Frame1, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
+    vie1_bis = Scale(Frame1, orient='horizontal', from_=0, to=15, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
     vie1_bis.pack()
-    vie1_bis.set(25)
+    vie1_bis.set(5)
 
     t1 = Scale(Frame1, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale')
     t1.pack()
@@ -511,23 +530,23 @@ def affichage():
     #Frame 2
     double = IntVar()
     double_chk = Checkbutton(Frame2, text="Deux bacteries ?", variable = double)
-    double_chk.pack()
+    double_chk.pack(pady = 15)
 
-    symb = IntVar()
+    """symb = IntVar()
     symb_chk = Checkbutton(Frame2, text = "Symbiose ?", variable = symb)
-    symb_chk.pack(padx = 0, pady = 0)
+    symb_chk.pack(padx = 0, pady = 0)"""
 
-    taux2 = Scale(Frame2, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
-    taux2.pack()
-    taux2.set(0.5)
+    taux2_scl = Scale(Frame2, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
+    taux2_scl.pack()
+    taux2_scl.set(0.5)
 
-    vie2 = Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie')
+    vie2 = Scale(Frame2, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie')
     vie2.pack()
-    vie2.set(25)
+    vie2.set(10)
 
-    vie2_bis = Scale(Frame2, orient='horizontal', from_=0, to=50, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
+    vie2_bis = Scale(Frame2, orient='horizontal', from_=0, to=15, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
     vie2_bis.pack()
-    vie2_bis.set(25)
+    vie2_bis.set(5)
 
     t2 = Scale(Frame2, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale')
     t2.pack()
@@ -549,19 +568,19 @@ def affichage():
     Ph.pack()
     Ph.set(7.0)
 
-    nour = Scale(Frame4, orient='horizontal', from_=0, to=100, resolution=5, tickinterval=10, length=350, label="Ajout de nourriture tous les X tours (0 = pas d'ajout)")
+    nour = Scale(Frame4, orient='horizontal', from_=0, to=50, resolution=5, tickinterval=5, length=350, label="Ajout de nourriture tous les X tours (0 = pas d'ajout)")
     nour.pack()
     nour.set(30)
 
-    Qnour = Scale(Frame4, orient='horizontal', from_=1, to=20, resolution=1, tickinterval=2, length=350, label='Quantité de nourriture')
+    Qnour = Scale(Frame4, orient='horizontal', from_=0, to=10, resolution=1, tickinterval=2, length=350, label='Quantité de nourriture')
     Qnour.pack()
-    Qnour.set(15)
+    Qnour.set(5)
 
-    antib = Scale(Frame4, orient = 'horizontal', from_ = 0, to = 100, resolution=5, tickinterval=10, length=350, label="Ajout d'antibiotique tous les X tours (0 = pas d'ajout)")
+    antib = Scale(Frame4, orient = 'horizontal', from_ = 0, to = 50, resolution=5, tickinterval=10, length=350, label="Ajout d'antibiotique tous les X tours (0 = pas d'ajout)")
     antib.pack()
-    antib.set(35)
+    antib.set(20)
 
-    vie_antib = Scale(Frame4, orient ="horizontal", from_= 0, to = 100, resolution = 5, tickinterval = 10, length=350, label ="Durée de 'vie' de l'antibiotique")
+    vie_antib = Scale(Frame4, orient ="horizontal", from_= 0, to = 50, resolution = 5, tickinterval = 10, length=350, label ="Durée de 'vie' de l'antibiotique")
     vie_antib.pack()
     vie_antib.set(20)
 
@@ -578,7 +597,7 @@ def affichage():
     globals()["canvas"] = canvas
 
     #Boutons pour lancer la simulation
-    globall(vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, symb, symb_chk, t, Ph, nour, Qnour, antib, iter, iter_ent)
+    globall(taux1_scl, taux2_scl, vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, t, Ph, nour, Qnour, antib, iter, iter_ent)
 
     recup_valeur = Button(Frame1, text="Récupère les valeurs inscrites", command = getall)
     recup_valeur.pack(side = "bottom")
@@ -593,7 +612,7 @@ def affichage():
     return None
 
 def reset():
-    init_canvas(canvas)
+    globals()["canvas"] = init_canvas(canvas)
     return None
 
 def lancer():
@@ -604,7 +623,9 @@ def lancer():
     return None
 
 
-def globall(vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, symb, symb_chk, t, Ph, nour, Qnour, antib, iter, iter_ent):
+def globall(taux1, taux2, vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, t, Ph, nour, Qnour, antib, iter, iter_ent):
+    globals()["taux1_scl"] = taux1
+    globals()["taux2_scl"] = taux2
     globals()["vie1"] = vie1
     globals()["vie2"] = vie2
     globals()["vie1_bis"] = vie1_bis
@@ -616,8 +637,8 @@ def globall(vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double,
     globals()["Ph2"] = Ph2
     globals()["double"] = double
     globals()["double_chk"] = double_chk
-    globals()["symb"] = symb
-    globals()["symb_chk"] = symb_chk
+    """globals()["symb"] = symb
+    globals()["symb_chk"] = symb_chk"""
     globals()["t"] = t
     globals()["Ph"] = Ph
     globals()["nour"] = nour
@@ -628,6 +649,8 @@ def globall(vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double,
     return None
 
 def getall():
+    globals()["taux1"] = taux1_scl.get()
+    globals()["taux2"] = taux2_scl.get()
     globals()["lifespawn_bact1"] = vie1.get()
     globals()["lifespawn_bact2"] = vie2.get()
     globals()["lifespawn_sans_nourriture_bact1"] = vie1_bis.get()
@@ -638,7 +661,7 @@ def getall():
     globals()["ph1"] = Ph1.get()
     globals()["ph2"] = Ph2.get()
     globals()["deux_bact"] = double.get() #Renvoie 1 si cochée 0 sinon
-    globals()["symbiose"] = symb.get() #Renvoie 1 si cochée 0 sinon
+    """globals()["symbiose"] = symb.get() #Renvoie 1 si cochée 0 sinon"""
     globals()["temp"] = t.get()
     globals()["ph"] = Ph.get()
     globals()["f_nourriture"] = nour.get()
