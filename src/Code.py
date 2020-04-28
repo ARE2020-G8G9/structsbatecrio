@@ -95,7 +95,7 @@ def init_pos_bact(boite, bact, canvas):
     canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = couleur_souche)
     return box
 
-###Trouver le voisinage (à tester avec le dico)(semble marcher quand meme)
+### Trouver le voisinage (à tester avec le dico)(semble marcher quand meme)
 
 
 
