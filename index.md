@@ -1,7 +1,7 @@
 # Croissance bactériologique et structure de colonisation du milieu
 
 Résumé de quelques lignes présentant l'objectif de votre projet, la méthode que vous avez suivie pour le réaliser et les résultats marquants que vous avez obtenus.
-
+ 
 
 L'objectif de ce projet est de visualiser les structures visibles lors de la colonisation d'une boite de pétri par une ou deux bactéries et de voir comment certains paramètres peuvent modifier ces structures.
 Pour ce faire nous avons réaliser une simulation par Python et un affichage par Tkinter afin d'observer les structures tout en modifiant certain paramètres via une interface pratique.
