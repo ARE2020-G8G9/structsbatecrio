@@ -1,4 +1,4 @@
-## Travail effectué 
+## Travail effectué  
 
 => Description hebdomadaire du travail effectué
 
