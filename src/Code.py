@@ -22,31 +22,44 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
+#on définit le type boite par le type list[list[dict[str : Number]]]
 
 ###initialisation des paramètres et bacteries
 
 #widget ph_opt, temp_opt, taux de croissance optimal... enfin tous les parametres mis en demande a l'utilisateur pour deux bacteries donc on indice les valeur par le type 1 ou 2 de la bacterie (ex : ph_opt2) sauf pour la temperature de la boite notee temp et son ph note ph qui prennent d'autres curseurs
 
 def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
-    if temp_opt <= 20:
+    """
+        float * float * float * int * int -> float
+        
+        Retourne le taux de croissance effectif de la souche.
+    """
+    if temp_opt <= 7:
         tmin = 0
+        tmax = 7
+    if temp_opt > 7 and temp_opt <= 20:
+        tmin = 7
         tmax = 20
-    if temp_opt > 20 and temp_opt < 45:
+    if temp_opt > 20 and temp_opt < 40:
         tmin = 20
         tmax = 45
     if temp_opt >= 45:
         tmin = 45
-        tmax = 70
-    taux_temp = ((temp - tmax)*(temp - tmin)**2) / ((temp_opt - tmin) * (temp_opt - tmin)*(temp - temp_opt) - (temp_opt - tmax)*(temp_opt + tmin - 2*temp))
+        tmax = 75
+    if temp < tmin or temp > tmax:
+        return 0
+    taux_temp = ((temp - tmax)*(temp - tmin)*2) / ((temp_opt - tmin) * ((temp_opt - tmin)*(temp - temp_opt) - (temp_opt - tmax)*(temp_opt + tmin - 2*temp)))
     if ph_opt <= 6:
-        ph_min = 1
+        ph_min = 3
         ph_max = 6
     if ph_opt > 6 and ph_opt <= 8:
         ph_min = 6
         ph_max = 8
     if ph_opt > 8:
-        ph_min = 7
-        ph_max = 11.5
+        ph_min = 8
+        ph_max = 11
+    if ph < ph_min or ph > ph_max:
+        return 0
     a = ph - ph_min
     b = ph - ph_max
     c = ph - ph_opt
@@ -54,30 +67,60 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
     return taux_opt * taux_temp * taux_ph
 
 def init_bact(num_souche, taux_opt, ph, ph_opt, temp, temp_opt):
+    """
+        int * float * float * float * int * int -> dict[str : Number]
+        
+        retourne les données de la bactérie sur la case actuelle.
+    """
     return {'x' : 0, 'y' : 0, 'contenu' : num_souche + 2,'dernier_repas' : 0, 'age' : 0, 'taux_de_croissance' : taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt), 'capa_de_repro' : 0, 'nb_action' : 0}
 
 ###Initialisation de la boite
 def coo(x, y):
+    """
+        int * int -> dict[str : Number]
+        
+        Initialise la position de la case actuelle. 
+    """
     return {'x' : x, 'y' : y, 'contenu' : 1,'dernier_repas' : 0, 'age' : 0, 'taux_de_croissance' : 0, 'capa_de_repro' : 0, 'nb_action' : 0}
 
 def L_dico(k, L):
+    """
+        int * int -> list[dict[str : Number]]
+        
+        retourne sous forme de liste une ligne de la boîte
+    """
     res = []
     for i in range(0, L):
         res.append(coo(k, i))
     return res
 
 def init_boite(L):
+    """
+        int -> list[list[dict : Number]]
+        
+        retourne la boîte initialisée.
+    """
     res = []
     for i in range(0,L):
         res.append(L_dico(i, L))
     return res
 
 def pos_alea(boite):
+    """
+        boite -> tuple[int, int]
+        
+        retourne des valeurs de position choisies aléatoirement
+    """
     L = len(boite);
     l = len(boite[0])
     return (random.choice(range(0, L)), random.choice(range(0, l)))
 
 def init_pos_bact(boite, bact, canvas):
+    """
+        boite * dict[str : int] * Canvas -> boite
+        
+        retourne la boite avec les positions de bactéries initialisées.
+    """
     box = boite
     x, y = pos_alea(boite)
     box[x][y] = bact
@@ -100,6 +143,11 @@ def init_pos_bact(boite, bact, canvas):
 
 
 def voisinage(boite, x, y, taille) :
+    """
+        boite * int * int * int -> list[dict[str : Number]]
+        
+        retourne le voisinage de la case de coordonnées (x, y)
+    """
     res = []
     if x + taille < len(boite) and x - taille >= 0:
         if y - taille >= 0 and y + taille < len(boite[0]):
@@ -181,6 +229,11 @@ def voisinage(boite, x, y, taille) :
     return res
 
 def convert_to_array(boite):
+    """
+        boite -> array[list[int]]
+        
+        renvoit la  matrice des contenus de la boite
+    """
     res = []
     for i in range(0, len(boite)):
         temp = []
@@ -189,23 +242,16 @@ def convert_to_array(boite):
         res.append(temp)
     return np.array(res)
 
-"""def convert_for_tkinter(boite):
-    res = []
-    for i in range(0, 49):"""
-
-def plot_boite(boite):
-    box = boite
-    A = convert_to_array(box)
-    plt.figure(figsize=(15,12)) # (30,30) = Taille de la figure
-    plt.imshow(A,cmap='viridis')
-    plt.colorbar()
-    plt.tick_params(top=False, bottom=False, right=False, left=False, labelleft=False, labelbottom=False)
-    plt.show()
-
 ### Statistiques
 #pas mal de fonctions proches des stats de Schelling
 
 def nb_entites(boite):
+    """
+        boite -> dict[str : int]
+        
+        renvoie sous forme de dictionnaire le nombre de bactéries 1 et 2, de cases vides, de nourritures, 
+        et d'antibiotique dans la boite lors de la i_ème itération. 
+    """
     res = {"Vide" : 0, "Nourriture" : 0, "Antibio" : 0, "Bacterie1" : 0, "Bacterie2" : 0}
     for i in range(0, len(boite)):
         for j in range(0, len(boite[0])):
@@ -223,15 +269,20 @@ def nb_entites(boite):
     return res
 
 def affiche_courbes(iter_max, b1, b2, n, a, t_b, v, n_iter):
+    """
+        int * int * int * int * int * int * int * int -> NoneType
+        
+        affiche les courbes de la simulation.
+    """
     #x = np.linspace(0, iter_max, num=iter_max)
     x = [i for i in range (0, n_iter)]
 
-    plt.plot(x, b1, label = 'souche1')
-    plt.plot(x, b2, label = 'souche2')
-    plt.plot(x, n, label = 'nourriture')
-    plt.plot(x, a, label = 'antibio')
-    plt.plot(x, t_b, label = 'total_bacteries')
-    plt.plot(x, v, label = 'cases_vides')
+    plt.plot(x, b1, label = 'souche1', color = 'r')
+    plt.plot(x, b2, label = 'souche2', color = 'tab:orange')
+    plt.plot(x, n, label = 'nourriture', color ='g')
+    plt.plot(x, a, label = 'antibio', color ='b')
+    plt.plot(x, t_b, label = 'total_bacteries', color = 'tab:pink')
+    plt.plot(x, v, label = 'cases_vides', color = 'k')
 
     plt.ylabel("Nombre d'entités")
     plt.xlabel("Nombre d'itérations")
@@ -241,12 +292,22 @@ def affiche_courbes(iter_max, b1, b2, n, a, t_b, v, n_iter):
 ###Evolution du système (à changer avec les dico)
 
 def in_liste(contenu, liste): #cherche si un contenu est dans une liste de dico
+    """
+        int * list[dico[str : int]] -> bool
+        
+        indique si l'élément demandé est dans la ligne ou non.
+    """
     for i in range(0, len(liste)):
         if contenu == liste[i]['contenu']:
             return True
     return False
 
 def mort_bacterie(boite, x, y, canvas):
+    """
+        boite * int * int * Canvas -> boite
+        
+        fait mourir la bactérie à l'emplacement voulu.
+    """
     box = boite
     box[x][y]["x"] = x
     box[x][y]["y"] = y
@@ -264,6 +325,11 @@ def mort_bacterie(boite, x, y, canvas):
     return box
 
 def mort_antibio(boite, x, y, canvas):
+    """
+        boite * int * int * Canvas -> boite
+        
+        Supprime l'antibiotique à l'emplacement voulu.
+    """
     box = boite
     box[x][y]["x"] = x
     box[x][y]["y"] = y
@@ -281,6 +347,11 @@ def mort_antibio(boite, x, y, canvas):
     return box
 
 def deplacement_possible(boite, x, y):
+    """
+        boite * int * int -> bool
+        
+        retourne True si la case sur laquelle la bactérie veut se déplacer est libre, False sinon.
+    """
     if boite[x][y]['contenu'] == 3 or boite[x][y]['contenu'] == 4:
         if boite[x][y]['nb_action'] != 0:
             return False
@@ -290,10 +361,20 @@ def deplacement_possible(boite, x, y):
 
 
 def distance_parcours(x0, y0, x1, y1):
+    """
+        int * int * int * int -> int
+        
+        retourne la distance entre les case aux coordonnées (x1, y1) et (x2, y2).
+    """
     return abs(x1 - x0) + abs(y1 - y0)
 
 
 def deplacement(boite, x, y, coordonnees, canvas):
+    """
+        boite * int * int * tuple[int, int]
+        
+        retourne la boite boite, avec les déplacement de la bactérie effectué.
+    """
     new_x, new_y = coordonnees
     box = boite
     if box[new_x][new_y]['contenu'] == 1:
@@ -321,6 +402,11 @@ def deplacement(boite, x, y, coordonnees, canvas):
     return box
 
 def voisinage_direct_libre(boite, x, y):
+    """
+        boite * int * int -> list[dict[str : Number]]
+        
+        Retourne les cases adjacentes la bactérie qui sont libres.
+    """
     voisinage0 = voisinage(boite, x, y, 1)
     res = []
     contenu = boite[x][y]['contenu']
@@ -333,6 +419,11 @@ def voisinage_direct_libre(boite, x, y):
     return res
 
 def choix_deplacement(boite, x, y, taille):
+    """
+        boite * int * int * int -> tuple[int, int]
+        
+        Retourne la future position de la bactérie.
+    """
     if deplacement_possible(boite, x, y):
         box = boite
         voisi = voisinage_direct_libre(box, x ,y)
@@ -344,11 +435,17 @@ def choix_deplacement(boite, x, y, taille):
         return None
 
 def naissance(boite, x, y, coordonnees, canvas):
+    """
+        boite * int * int * tuple[int, int] * Canvas ->boite
+    
+        retourne la nouvelle boite avec une naissance de bactérie.
+    """
     new_x, new_y = coordonnees
     box = boite
     bact_type = box[x][y]['contenu']
     taux = box[x][y]['taux_de_croissance']
     box = deplacement(boite, x, y, coordonnees, canvas)
+    box[new_x][new_y]['age'] = 0
     box[x][y]['contenu'] = bact_type
     box[x][y]['dernier_repas'] = 0
     box[x][y]['age'] = 0
@@ -392,48 +489,6 @@ def ajout_antibio(boite, coordonnees):
         for j in range(-4, 5):
             if distance_parcours(x, y, x + i, y + j) <= 5 and ( ( (i != -1) or (i != 1) ) and ( (j != -4) or (j != 4) ) ):
                 box = remplace_par_antibio_si_non_resis(box, x + i, y + j)
-    return box
-
-def evo_age(boite):
-    box = boite
-    for i in range(0, len(box)):
-        for j in range(0, len(box[0])):
-            contenu = box[i][j]['contenu']
-            if contenu >= 2:
-                box[i][j]['age']+= 1
-                if contenu != 2:
-                    box[i][j]['dernier_repas']+= 1
-    return box
-
-def evo_capa_de_reprod(boite):
-    box = boite
-    for i in range(0, len(box)):
-        for j in range(0, len(box[0])):
-            contenu = box[i][j]['contenu']
-            if contenu == 3 or contenu == 4:
-                box[i][j]['capa_de_repro']+=0.1
-    return box
-
-def death_verif_and_apply(boite, canvas):
-    box = boite
-    for i in range(0, len(box)):
-        for j in range(0, len(box[0])):
-            contenu = box[i][j]['contenu']
-            age = box[i][j]['age']
-            dernier_repas = box[i][j]['dernier_repas']
-            if contenu == 2 and age >= lifespawn_antibio:
-                box = mort_antibio(boite, i, j, canvas)
-            if contenu == 3 and (age >= lifespawn_bact1 or dernier_repas >= lifespawn_sans_nourriture_bact1):
-                box = mort_bacterie(box, i, j, canvas)
-            if contenu == 4 and (age >= lifespawn_bact2 or dernier_repas >= lifespawn_sans_nourriture_bact2):
-                box = mort_bacterie(box, i, j, canvas)
-    return box
-
-def reset_nb_action(boite):
-    box = boite
-    for i in range(0, len(box)):
-        for j in range(0, len(box[0])):
-            box[i][j]['nb_action'] = 0
     return box
 
 def coo_vide(boite):
@@ -521,6 +576,34 @@ def interact_bact(boite, x, y, coordonnees, canvas):
         canvas.create_rectangle(x0, y0, x1, y1, width = 0, fill = "white")
     return box
 
+def evolution_variables(boite):
+    box = boite
+
+    for i in range(0, len(box)):
+        for j in range(0, len(box[0])):
+            #augmentation des ages
+            contenu = box[i][j]['contenu']
+            if contenu >= 2:
+                box[i][j]['age']+= 1
+                if contenu != 2:
+                    box[i][j]['dernier_repas']+= 1
+            #vérification des ages et application des morts
+            age = box[i][j]['age']
+            dernier_repas = box[i][j]['dernier_repas']
+            if contenu == 2 and age >= lifespawn_antibio:
+                box = mort_antibio(boite, i, j, canvas)
+            if contenu == 3 and (age >= lifespawn_bact1 or dernier_repas >= lifespawn_sans_nourriture_bact1):
+                box = mort_bacterie(box, i, j, canvas)
+            if contenu == 4 and (age >= lifespawn_bact2 or dernier_repas >= lifespawn_sans_nourriture_bact2):
+                box = mort_bacterie(box, i, j, canvas)
+            #evolution de la capacité de reproduction
+            if contenu == 3 or contenu == 4:
+                box[i][j]['capa_de_repro']+=0.1
+            #reset du nombre d'actions
+            box[i][j]['nb_action'] = 0
+
+    return box
+
 ### Affichage
 def convert_to_array(boite):
     res = []
@@ -562,10 +645,8 @@ def tour(boite, canvas):
                     box = naissance(box, i, j, dest, canvas)
                 else:
                     box = deplacement(box, i, j, dest, canvas)
-    box = evo_age(box)
-    box = death_verif_and_apply(box, canvas)
-    box = evo_capa_de_reprod(box)
-    box = reset_nb_action(box)
+    box = evolution_variables(box)
+    canvas.update()
     return box
 
 def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas):
@@ -720,11 +801,12 @@ def affichage():
     iter.set("20")
 
     #Frame3
-    canvas = Canvas(Frame3, width="99m", height="99m", background='black')
-    canvas.pack()
-    canvas = init_canvas(canvas)
+    canvas0 = Canvas(Frame3, width="99m", height="99m", background='black')
+    canvas0.pack()
+    canvas = init_canvas(canvas0)
+    globals()["canvas0"] = canvas0
     globals()["canvas"] = canvas
-
+    
     Label(Frame3, text="L'optimisation n'étant pas exceptionnelle,\n le temps de calcul peut être long pour des grands nombres d'itérations").pack(pady = 50)
 
     #Boutons pour lancer la simulation
@@ -743,7 +825,7 @@ def affichage():
     return None
 
 def reset():
-    globals()["canvas"] = init_canvas(canvas)
+    globals()["canvas"] = init_canvas(canvas0)
     return None
 
 def lancer():
