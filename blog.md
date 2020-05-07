@@ -23,4 +23,10 @@ La création de cette interface à nécessité beaucoup de temps pour la rendre 
 L'ajout de la seconde bactérie n'a pas été un souci majeur car la plupart des fonctions avaient déjà été prévu pour deux bactéries.
 De plus nous avons fait le choix de ne pas réaliser certain point de notre feuille de route car ils ne semblaient pas indispensables, par exemple la mutation des bactéries résultant en une résistance aux antibiotiques est tellement rare dans le cas d'une étude dans une boite de pétri que son implémentation relevait plus du gadget que d'une notion utile.
 
+### Semaine 5
+Envoie du carnet de bord aux bibliothéquaires (il a été envoyé à la mauvaise personne).
+Nous avons pu optimisé un peu le code en regroupant en une seule plusieurs fonctions qui effectuaient des tours de la boite.
+L'affichage de la boite est maintenant dynamique, cela pose un problème de vitesse d'exécution pour les grands nombres d'itérations mais l'animation est plus agréable à regarder.
+Fin de l'édition du texte du site internet.
+
 <a href="index.html"> Retour à la page principale </a>

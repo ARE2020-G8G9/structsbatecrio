@@ -5,6 +5,8 @@ Résumé de quelques lignes présentant l'objectif de votre projet, la méthode 
 
 L'objectif de ce projet est de visualiser les structures visibles lors de la colonisation d'une boite de pétri par une ou deux bactéries et de voir comment certains paramètres peuvent modifier ces structures.
 Pour ce faire nous avons réaliser une simulation par Python et un affichage par Tkinter afin d'observer les structures tout en modifiant certain paramètres via une interface pratique.
+En ce qui concerne une expérience avec une seule bactérie, nous pouvons déceler 
+
 
 ## English version: Bacteriological growth and environmental colonization structure
 
@@ -31,13 +33,26 @@ To do this, we performed a simulation by Python and a display by Tkinter in orde
 
 **Objectifs :** Déterminer la vitesse de colonisation du milieu par une bactérie en fonction de plusieurs critères (ph, température, vitesse de division, taux de mutations...).
 
-**Critère(s) d'évaluation :**
+**Critère(s) d'évaluation :** Nombres d'individus, de vides, de cases de nourriture dans la boîte.
 
 ## Présentation structurée des résultats
 
 Nous avons décidé de choisir le modèle exponentielle afin d'étudier la structure de colonisation d'une boîte de pétri par une ou des bactérie(s):
+ce modèle induit que chaque bactérie mère se sépare en deux nouvelles bactéries filles lors de sa reproduction.
 
-(Présentation du choix de modélisation, des outils, du code et des résultats (tableaux, courbes, animations...)) (**avec une analyse critique**).
+Pour modéliser la croissance de nos bactéries nous avons opté pour une représentation graphique en couleur de l'état de la boite de pétri à laquelle nous avons ajouté des courbes avec le même code couleur.
+En ce qui concerne la boite nous avons utilisé un canvas de tkinter afin de pouvoir l'actualiser à chaque tour de boucle. 
+Il nous permet de dessiner des rectangles (qui sont des carrés en l'occurence) de couleur différente pour chaque entité possible dans la boîte (blanc pour un vide, rouge ou orange pour une bactérie, vert pour la nourriture, bleu pour l'antibiotique).
+Pour l'affichage des courbes de résulatats, nous utilisons matplotlib car nous avions déjà de l'expérience avec cette bibliothèque après le TP sur Schelling.
+De plus, cette bibliothèque a pour avantage de permettre à l'utilisateur quelques manipulations sur la fenêtre des courbes afin par exemple de pourvoir zoomer sur une partie qui l'intéresserait plus.
+
+La boite étant grande (100 * 100 donc 10 000 cases au total) il est difficile pour une bactérie seule de coloniser tout le milieu en peu de temps et cela est presque impossible sans ajout de nourriture régulier (sauf si la bactérie possède une longue durée de vie sans se nourrir).
+On remarque de plus une diminution de la vitesse d'expension lorsque la courbe du nombre d'individu (qui est croissant) coupe celle de la nourriture (qui décroit).
+En général, lorsque deux bactéries sont présentes la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires).
+Lorsqu'il n'y a qu'une seule bactérie, si elle apparait vers le centre, elle se développera plus vite que si elle apparait dans un coin de la boîte.
+
+Nous avons décidé de retirer certaines fonctionnalité qui était prévu car trop rare dans des conditions d'expériences réelles ; ceci comprend la mutation des bactéries résultant en une résiatance aux antibiotique ainsi que la symbiose entre bactérie de type différent.
+
 
 ## Lien vers page de blog : <a href="blog.html"> C'est ici ! </a>
 
