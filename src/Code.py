@@ -56,10 +56,6 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
         b = ph - ph_max
         c = ph - ph_opt
         taux_ph = a * b / ( a * b - c**2 )
-    print(taux_temp)
-    print(taux_ph)
-    print("taux de croissance :")
-    print (taux_opt * min(1, taux_temp) * min(1, taux_ph),"\n")
     return taux_opt * min(1, taux_temp) * min(1, taux_ph)
 
 def init_bact(num_souche, taux_opt, ph, ph_opt, temp, temp_opt):
