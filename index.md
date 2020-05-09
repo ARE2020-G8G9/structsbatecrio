@@ -79,12 +79,12 @@ Pour l'affichage des courbes de résultats, nous utilisons matplotlib car nous a
 De plus, cette bibliothèque a pour avantage de permettre à l'utilisateur quelques manipulations sur la fenêtre des courbes afin par exemple de pourvoir zoomer sur une partie qui l'intéresserait plus.
 
 La boîte étant grande (100 * 100 donc 10 000 cases au total) il est difficile pour une bactérie seule de coloniser tout le milieu en peu de temps et cela est presque impossible sans ajout de nourriture régulier (sauf si la bactérie possède une longue durée de vie sans se nourrir).
-On remarque de plus une diminution de la vitesse d'expension lorsque la courbe du nombre d'individu (qui est croissant) coupe celle de la nourriture (qui décroit).
+On remarque de plus une diminution de la vitesse d'expension lorsque la courbe du nombre d'individu (qui est croissant) coupe celle de la nourriture (qui décroît).
 En général, lorsque deux bactéries sont présentes, la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires).
 Lorsqu'il n'y a qu'une seule bactérie, si elle apparaît vers le centre, elle se développera plus vite que si elle apparaît dans un coin de la boîte.
 On peut donc estimer que l'hypothèse secondaire selon laquelle la position de départ au milieu donne une avantage dans le développement d'une bactérie est validée.
 
-A chaque simulation,les bactéries présentes s’agglutinent sur la nourriture disponible adjacente à leur position, et les colonies suivent la nourriture qui s’éloigne au fur et à mesure. 
+A chaque simulation, les bactéries présentes s’agglutinent sur la nourriture disponible adjacente à leur position, et les colonies suivent la nourriture qui s’éloigne au fur et à mesure. 
 Lorsque de la nourriture apparaît à un endroit éloigné des bactéries, celles-ci ne réagissent pas. Mais si des bactéries sont présentes encore à cet endroit, alors elles se reproduisent tant que la nourriture est disponible et meurent lorsque celle-ci est consumée.
 Cependant, si les bactéries trop éloignées de la nourriture semblent ne pas réagir, c'est parce que le programme ne leur permet pas de détecter la présence de nourriture si celle-ci n'est pas adjacente à leur position. 
 Elles ne peuvent donc pas se déplacer en conséquence. Nous avons tout de même la confirmation qu’elles colonisent le milieu tant que de la nourriture est accessible de façon immédiate.
