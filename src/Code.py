@@ -34,39 +34,32 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
         
         Retourne le taux de croissance effectif de la souche.
     """
-    if temp_opt <= 7:
-        tmin = 0
-        tmax = 7
-    if temp_opt > 7 and temp_opt <= 20:
-        tmin = 7
-        tmax = 20
-    if temp_opt > 20 and temp_opt < 40:
-        tmin = 20
-        tmax = 45
-    if temp_opt >= 45:
-        tmin = 45
-        tmax = 75
+    tmin = temp - 20
+    tmax = temp + 20
     if temp < tmin or temp > tmax:
         return 0
-    taux_temp = ((temp - tmax)*(temp - tmin)*2) / ((temp_opt - tmin) * ((temp_opt - tmin)*(temp - temp_opt) - (temp_opt - tmax)*(temp_opt + tmin - 2*temp)))
+    a = temp - tmax
+    b = (temp - tmin) ** 2
+    c = temp_opt - tmin
+    d = temp - temp_opt
+    e = temp_opt - tmax
+    f = temp_opt + tmin - 2*temp
+    taux_temp = (a * b) / (c * (c * d - e * f))
     if ph == ph_opt:
         taux_ph = 1
     else:
-        if ph_opt <= 6:
-            ph_min = 3
-            ph_max = 6
-        if ph_opt > 6 and ph_opt <= 8:
-            ph_min = 6
-            ph_max = 8
-        if ph_opt > 8:
-            ph_min = 8
-            ph_max = 11
+        ph_min = ph - 3
+        ph_max = ph + 3
         if ph < ph_min or ph > ph_max:
             return 0
         a = ph - ph_min
         b = ph - ph_max
         c = ph - ph_opt
         taux_ph = a * b / ( a * b - c**2 )
+    print(taux_temp)
+    print(taux_ph)
+    print("taux de croissance :")
+    print (taux_opt * min(1, taux_temp) * min(1, taux_ph),"\n")
     return taux_opt * min(1, taux_temp) * min(1, taux_ph)
 
 def init_bact(num_souche, taux_opt, ph, ph_opt, temp, temp_opt):
