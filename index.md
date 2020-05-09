@@ -53,7 +53,7 @@ On remarque de plus une diminution de la vitesse d'expension lorsque la courbe d
 En général, lorsque deux bactéries sont présentes la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires).
 Lorsqu'il n'y a qu'une seule bactérie, si elle apparait vers le centre, elle se développera plus vite que si elle apparait dans un coin de la boîte.
 
-Nous avons décidé de retirer certaines fonctionnalité qui était prévu car trop rare dans des conditions d'expériences réelles ; ceci comprend la mutation des bactéries résultant en une résiatance aux antibiotique ainsi que la symbiose entre bactéries de type différent.
+Nous avons décidé de retirer certaines fonctionnalité qui était prévu car trop rare dans des conditions d'expériences réelles ; ceci comprend la mutation des bactéries résultant en une résistance aux antibiotiques ainsi que la symbiose entre bactéries de types différents.
 
 
 ## Lien vers page de blog : <a href="blog.html"> C'est ici ! </a>
