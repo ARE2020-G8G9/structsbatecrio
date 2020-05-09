@@ -34,8 +34,8 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
         
         Retourne le taux de croissance effectif de la souche.
     """
-    tmin = temp - 20
-    tmax = temp + 20
+    tmin = temp_opt - 20
+    tmax = temp_opt + 20
     if temp < tmin or temp > tmax:
         return 0
     a = temp - tmax
@@ -48,8 +48,8 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
     if ph == ph_opt:
         taux_ph = 1
     else:
-        ph_min = ph - 3
-        ph_max = ph + 3
+        ph_min = ph_opt - 3
+        ph_max = ph_opt + 3
         if ph < ph_min or ph > ph_max:
             return 0
         a = ph - ph_min
