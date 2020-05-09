@@ -436,9 +436,9 @@ def choix_deplacement(boite, x, y, taille):
 
 def naissance(boite, x, y, coordonnees, canvas):
     """
-        boite * int * int * tuple[int, int] * Canvas ->boite
+        boite * int * int * tuple[int, int] * Canvas -> boite
     
-        retourne la nouvelle boite avec une naissance de bactérie.
+        Retourne la nouvelle boite avec une naissance de bactérie.
     """
     new_x, new_y = coordonnees
     box = boite
@@ -464,6 +464,11 @@ def naissance(boite, x, y, coordonnees, canvas):
     return box
 
 def pos_alea_antibio(boite):
+    """
+        boite -> tuple[int, int]
+        
+        retourne la position de l'antibiotique.
+    """
     #la goutte est de hauteur et largeur max 9
     intervalle = range(0,len(boite) - 9)
     x = random.choice(intervalle)
@@ -471,6 +476,11 @@ def pos_alea_antibio(boite):
     return (x, y)
 
 def remplace_par_antibio_si_non_resis(boite, x, y):
+    """
+        boite * int * int -> boite
+        
+        Retourne la boite dans laquelle la bactérie non résistante à l'antibiotique est tuée.
+    """
     box = boite
     box[x][y]['contenu'] = 2
     box[x][y]['age'] = 0
@@ -482,7 +492,12 @@ def remplace_par_antibio_si_non_resis(boite, x, y):
     return box
 
 def ajout_antibio(boite, coordonnees):
-    """je suppose qu'on prend 100 * 100 en format de boite pour faire l'echelle de la goute"""
+    """
+        boite * tuple[int * int] -> boite
+        je suppose qu'on prend 100 * 100 en format de boite pour faire l'echelle de la goutte
+        
+        Retourne la boite avec l'antibiotique ajouté.
+    """
     box = boite
     x, y = coordonnees
     for i in range(-4, 5):
@@ -492,7 +507,11 @@ def ajout_antibio(boite, coordonnees):
     return box
 
 def coo_vide(boite):
-    """determine l'ensemble des coordonnees de contenu 0"""
+    """
+        boite -> list[tuple[int, int]]
+        
+        Retourne l'ensemble des coordonnees de contenu 0
+    """
     res = []
     for i in range(0, len(boite)):
         for j in range(0, len(boite[0])):
@@ -502,7 +521,11 @@ def coo_vide(boite):
     return res
 
 def coo_vide_nourriture(boite, demi_cote):
-    """dertermine l'ensemble des cases avec ajout de nourriture possible"""
+    """
+        boite * int -> list[tuple[int, int]]
+        
+        Retourne l'ensemble des cases avec ajout de nourriture possible
+    """
     res = []
     dim = len(boite)
     for i in range(0, len(boite)):
@@ -513,10 +536,20 @@ def coo_vide_nourriture(boite, demi_cote):
     return res
 
 def pos_alea_nourriture(boite, demi_cote):
+    """
+        boite * int -> tuple[int, int]
+        
+        Retourne la positioin à laquelle on met de la nourriture. 
+    """
     liste = coo_vide_nourriture(boite, demi_cote)
     return liste[random.choice(range(0, len(liste)))]
 
 def ajout_nourriture(boite, demi_cote, coordonnees, canvas):
+    """
+        boite * int * tuple[int, int] * Canvas -> boite
+        
+        Retourne le nouvelle boite avec la nourriture ajoutée.
+    """
     box = boite
     x, y = coordonnees
     for i in range(-demi_cote, demi_cote + 1):
@@ -543,6 +576,11 @@ def ajout_nourriture(boite, demi_cote, coordonnees, canvas):
     return box
 
 def interact_bact(boite, x, y, coordonnees, canvas):
+    """
+        boite * int * int * tuple[int, int] * Canvas -> boite
+        
+        Retourne le boite avec une des bactéries qui est gagnante (dans un duel)
+    """
     box = boite
     winner = random.choice(range(0,2))
     new_x, new_y = coordonnees
@@ -577,6 +615,11 @@ def interact_bact(boite, x, y, coordonnees, canvas):
     return box
 
 def evolution_variables(boite):
+    """
+        boite -> boite
+        
+        Retourne la boite avec toutes les évolutions calculées.
+    """
     box = boite
 
     for i in range(0, len(box)):
@@ -606,6 +649,11 @@ def evolution_variables(boite):
 
 ### Affichage
 def convert_to_array(boite):
+    """
+        boite -> array
+        
+        Retourne boite sous forme d'array
+    """
     res = []
     for i in range(0, len(boite)):
         temp = []
@@ -615,6 +663,11 @@ def convert_to_array(boite):
     return np.array(res)
 
 def plot_boite(boite):
+    """
+        boite -> NoneType
+        
+        Affiche la boite avec matplotlib.
+    """
     box = boite
     A = convert_to_array(box)
     plt.figure(figsize=(15,12)) # (30,30) = Taille de la figure
@@ -626,12 +679,22 @@ def plot_boite(boite):
 
 ###Global
 def continuer(boite):
+    """
+        boite -> True
+        
+        Retourne True s'il y a des bactéries
+    """
     pop = nb_entites(boite)
     if pop["Bacterie1"] + pop["Bacterie2"] == 0:
         return False
     return True
 
 def tour(boite, canvas):
+    """
+        boite * Canvas -> boite
+        
+        Retourne la boite mise à jour
+    """
     box = boite
     for i in range(0, len(box)):
         for j in range(0, len(box[0])):
@@ -650,6 +713,11 @@ def tour(boite, canvas):
     return box
 
 def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas):
+    """
+        boite * int * int * int * int * int * Canvas -> boite
+        
+        Retourne la boite avec l'antibiotique et la nourriture ajoutée.
+    """
     box = boite
     if  f_antibio != 0 and n_iter >= debut_ajout and n_iter % f_antibio == 0:
         box = ajout_antibio(boite, pos_alea_antibio(box))
@@ -660,6 +728,11 @@ def ajout(boite, n_iter, f_antibio, f_nourriture, demi_cote, debut_ajout, canvas
     return box
 
 def structure_bacterio(iter_max, canvas):
+    """
+        int * Canvas -> NoneType
+        
+        Forme la structure du code et retourne None
+    """
     res = dict()
     nb_bacterie1 = []
     nb_bacterie2 = []
@@ -693,7 +766,11 @@ def structure_bacterio(iter_max, canvas):
 ###Fenetre Tkinter
 
 def affichage():
-
+    """
+        -> Nonetype
+        
+        Initialise la fenêtre Tkinter.
+    """
     fenetre = Tk()
 
     label = Label(fenetre, text = "Merci d'utiliser notre simulation (à l'optimisation INCROYABLE) de croissance bacteriologique")
@@ -825,10 +902,20 @@ def affichage():
     return None
 
 def reset():
+    """
+        ->NonteType
+        
+        Réinitialise le canvas et retourne None
+    """
     globals()["canvas"] = init_canvas(canvas0)
     return None
 
 def lancer():
+    """
+        ->NoneType
+        
+        Lance la simulation et retourne None.
+    """
     getall()
     if type(iter_max) == int and iter_max > 0:
         structure_bacterio(iter_max, canvas)
@@ -838,6 +925,11 @@ def lancer():
 
 
 def globall(taux1, taux2, vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, t, Ph, nour, Qnour, antib, iter, iter_ent):
+    """
+        float*18 * int * int -> NonteType
+        
+        Retourne None après avoir initialisé les variables globales.
+    """
     globals()["taux1_scl"] = taux1
     globals()["taux2_scl"] = taux2
     globals()["vie1"] = vie1
@@ -861,6 +953,11 @@ def globall(taux1, taux2, vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1
     return None
 
 def getall():
+    """
+        -> NoneType
+        
+        Retourne None
+    """
     globals()["taux1"] = taux1_scl.get()
     globals()["taux2"] = taux2_scl.get()
     globals()["lifespawn_bact1"] = vie1.get()
@@ -883,6 +980,11 @@ def getall():
 
 
 def init_canvas(canvas):
+    """
+        Canvas -> Canvas
+        
+        Retourne le Canvas après son initialisation.
+    """
     #ls = []
     for i in range(0, 100):
         for j in range(0, 100):
