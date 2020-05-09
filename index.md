@@ -1,20 +1,22 @@
 # Croissance bactériologique et structure de colonisation du milieu
-
-Résumé de quelques lignes présentant l'objectif de votre projet, la méthode que vous avez suivie pour le réaliser et les résultats marquants que vous avez obtenus.
  
-
 L'objectif de ce projet est de visualiser les structures visibles lors de la colonisation d'une boite de pétri par une ou deux bactéries et de voir comment certains paramètres peuvent modifier ces structures.
 Pour ce faire nous avons réaliser une simulation par Python et un affichage par Tkinter afin d'observer les structures tout en modifiant certain paramètres via une interface pratique.
-En ce qui concerne une expérience avec une seule bactérie, nous pouvons déceler un taux de croissance minimal en fonction de la durée de vie de la bactérie pour que la souche ne s'éteigne pas. 
-
+Pour donner un exemple de résultat ainsi que de condition d'expérience dès maintenant, nous pouvons déceler une durée de vie minimale (en itertations) en fonction du taux de croissance effectif d'une souche afin que cette dernière ne s'éteigne pas au début de la simulation. 
+Comme le modèle de croissance primaire choisi est exponentiel (chaque bactérie en donne deux nouvelle à chaque division), le format de fonction choisi pour modéliser ce phénomène est lui aussi exponentiel.
+Le graphique représentant cela se trouve à [cette adresse](https://drive.google.com/open?id=1N1cfhPkAyh5dQDhtxmFP0bSHg0fmaaeX).
+Le taux de corélation obtenu (à savoir 0.95) étant proche de 1, on peut en conclure que la modélisation est satisfaisante, sans être parfaite.
+Ceci nous permet de fixer une condition minimale sur le taux de croissance à laquelle s'ajouteront de nouvelles conditions expliquées plus bas.
 
 ## English version: Bacteriological growth and environmental colonization structure
 
-Un titre et un résumé en anglais qui reprennent le titre et le résumé en français, mais en anglais pour attirer une audience internationale sur vos travaux !
-
-
 The goal of this project is to visualize the structures visible during the colonization of a petri box by one or two bacteria and to see how certain parameters can modify these structures.
 To do this, we performed a simulation by Python and a display by Tkinter in order to observe the structures while modifying certain parameters via a practical interface.
+As a exemple of result and of necessary condition for the experiment, we can find a minimal lifespan (in iterations) as a function of the effective growth rate of a bacterial strain so that it does not persih right at the start of the simulation.
+Because we choosed an exponential growth model (each bacteria give birth to two new ones we she divides), we choosed to use an exponential function to represent this phenomenon.
+The graph that depicts this is at [this adress](https://drive.google.com/open?id=1JAA5CgLlx63kgONDmUsMR0yLsrOApJfW)
+The correlation rate (which is 0.95) is close enought to 1 so that we can consider the model as acceptable, not perfect thought.
+With this we can fixe a minimal requirement on the growth rate, there are few more requirements (on the temperature and the pH) which are explained bellow (but in French, this is just a small presentation sorry).
 
 ## Présentation de l'équipe
 
@@ -41,6 +43,24 @@ Une bactérie plus adapté au milieux se trouvera dans une position de dominatio
 
 Nous avons décidé de choisir le modèle exponentielle afin d'étudier la structure de colonisation d'une boîte de pétri par une ou des bactérie(s):
 ce modèle induit que chaque bactérie mère se sépare en deux nouvelles bactéries filles lors de sa reproduction.
+
+Pour revenir sur les conditions minimales et leur mise en place, la température pour que le taux de croissance ne soit pas nul est limitée à ± 20 degrés Celsius de la température optimale et le pH est lui limité à ± 3 unité de pH du pH optimal.
+En effet si la bactérie se trouve dans un milieu dont la température ou le pH se trouve trop loin de la valeur optimale, la bactérie ne se plait pas dans le milieu et est donc incapable de s'y développer.
+Ceci présente donc une nouvelle contrainte (en plus de la durée de vie minimale) sur les conditions de l'exprérience afin qu'elle puisse être menée dans des conditions intéressantes.
+
+On donne aussi ce tableau récapitulatif de la durée de vie minimale (en itérations) par rapport au taux de croissance :
+| Taux de croissance | Durée de vie minimale (en itérations) |
+| ------------------ | ------------------------------------- |
+| 0.1 | 11 |
+| 0.2 | 10 | 
+| 0.3 | 9 |
+| 0.4 | 8 |
+| 0.5 | 7 |
+| 0.6 | 6 |
+| 0.7 | 5 |
+| 0.8 | 3 |
+| 0.9 | 3 |
+| 1 | 3 |
 
 Pour modéliser la croissance de nos bactéries nous avons opté pour une représentation graphique en couleur de l'état de la boite de pétri à laquelle nous avons ajouté des courbes avec le même code couleur.
 En ce qui concerne la boite nous avons utilisé un canvas de tkinter afin de pouvoir l'actualiser à chaque tour de boucle. 

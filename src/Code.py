@@ -754,8 +754,9 @@ def affichage():
     """
     fenetre = Tk()
 
-    label = Label(fenetre, text = "Merci d'utiliser notre simulation (à l'optimisation INCROYABLE) de croissance bacteriologique")
+    label = Label(fenetre, text = "Merci d'utiliser notre simulation de croissance bacteriologique")
     label.pack()
+    Label(fenetre, text = "L'unité de température est le degré Celsius.").pack()
 
     #fenetre['bg']='white'
 

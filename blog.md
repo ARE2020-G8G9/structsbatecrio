@@ -27,6 +27,6 @@ De plus nous avons fait le choix de ne pas réaliser certains points de notre fe
 Envoie du carnet de bord aux bibliothéquaires (il a été envoyé à la mauvaise personne).
 Nous avons pu optimiser un peu le code en regroupant plusieurs fonctions qui effectuaient des tours de la boite en une seule.
 L'affichage de la boite est maintenant dynamique, cela pose un problème de vitesse d'exécution pour les grands nombres d'itérations mais l'animation est plus agréable à regarder.
-Fin de l'édition du texte du site internet.
+Fin de l'édition du texte du site internet avec l'ajout de la description du résultat, et la fin de la présentation du projet en français et anglais.
 
 <a href="index.html"> Retour à la page principale </a>
