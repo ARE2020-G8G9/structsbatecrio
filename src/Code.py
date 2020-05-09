@@ -688,7 +688,7 @@ def tour(boite, canvas):
                 new_x, new_y = dest
                 if box[new_x][new_y]['contenu'] >= 3:
                     box = interact_bact(box, i, j, dest, canvas)
-                if case['age'] >= 1 and case['capa_de_repro'] >= (1 - case['taux_de_croissance']):
+                if case['age'] > 1 and case['capa_de_repro'] > (1 - case['taux_de_croissance']):
                     box = naissance(box, i, j, dest, canvas)
                 else:
                     box = deplacement(box, i, j, dest, canvas)
