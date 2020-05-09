@@ -44,8 +44,8 @@ ce modèle induit que chaque bactérie mère se sépare en deux nouvelles bacté
 
 Pour modéliser la croissance de nos bactéries nous avons opté pour une représentation graphique en couleur de l'état de la boite de pétri à laquelle nous avons ajouté des courbes avec le même code couleur.
 En ce qui concerne la boite nous avons utilisé un canvas de tkinter afin de pouvoir l'actualiser à chaque tour de boucle. 
-Il nous permet de dessiner des rectangles (qui sont des carrés en l'occurence) de couleur différente pour chaque entité possible dans la boîte (blanc pour un vide, rouge ou orange pour une bactérie, vert pour la nourriture, bleu pour l'antibiotique).
-Pour l'affichage des courbes de résulatats, nous utilisons matplotlib car nous avions déjà de l'expérience avec cette bibliothèque après le TP sur Schelling.
+Il nous permet de dessiner des rectangles (qui sont des carrés en l'occurence) de couleur différente pour chaque entité possible dans la boîte (blanc pour un vide, rouge pour la bactérie 1, orange pour la bactérie 2, vert pour la nourriture, bleu pour l'antibiotique).
+Pour l'affichage des courbes de résultats, nous utilisons matplotlib car nous avions déjà de l'expérience avec cette bibliothèque après le TP sur Schelling.
 De plus, cette bibliothèque a pour avantage de permettre à l'utilisateur quelques manipulations sur la fenêtre des courbes afin par exemple de pourvoir zoomer sur une partie qui l'intéresserait plus.
 
 La boite étant grande (100 * 100 donc 10 000 cases au total) il est difficile pour une bactérie seule de coloniser tout le milieu en peu de temps et cela est presque impossible sans ajout de nourriture régulier (sauf si la bactérie possède une longue durée de vie sans se nourrir).
@@ -53,7 +53,7 @@ On remarque de plus une diminution de la vitesse d'expension lorsque la courbe d
 En général, lorsque deux bactéries sont présentes la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires).
 Lorsqu'il n'y a qu'une seule bactérie, si elle apparait vers le centre, elle se développera plus vite que si elle apparait dans un coin de la boîte.
 
-Nous avons décidé de retirer certaines fonctionnalité qui était prévu car trop rare dans des conditions d'expériences réelles ; ceci comprend la mutation des bactéries résultant en une résiatance aux antibiotique ainsi que la symbiose entre bactérie de type différent.
+Nous avons décidé de retirer certaines fonctionnalité qui était prévu car trop rare dans des conditions d'expériences réelles ; ceci comprend la mutation des bactéries résultant en une résiatance aux antibiotique ainsi que la symbiose entre bactéries de type différent.
 
 
 ## Lien vers page de blog : <a href="blog.html"> C'est ici ! </a>
