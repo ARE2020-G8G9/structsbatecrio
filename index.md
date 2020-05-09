@@ -13,16 +13,16 @@ Ceci nous permet de fixer une condition minimale sur le taux de croissance à la
 
 ## English version: Bacteriological growth and environmental colonization structure
 
-The goal of this project is to visualize the structures visible during the colonization of a petri box by one or two bacteria and to see how certain parameters can modify these structures.
-To do this, we performed a simulation by Python and a display by Tkinter in order to observe the structures while modifying certain parameters via a practical interface.
+The goal of this project is to visualize the structures visible during the colonization of a petri box by one or two bacterias and to see how certain parameters can modify these structures.
+To do this, we performed a simulation by Python and a display by Tkinter in order to observe the structures while modifying some parameters via a practical interface.
 
-As a exemple of result and of necessary condition for the experiment, we can find a minimal lifespan (in iterations) as a function of the effective growth rate of a bacterial strain so that it does not persih right at the start of the simulation.
-Because we choosed an exponential growth model (each bacteria give birth to two new ones we she divides), we choosed to use an exponential function to represent this phenomenon.
+As an example of result and of necessary condition for the experiment, we can find a minimal lifespan (in iterations) as a function of the effective growth rate of a bacterial strain so that it does not perish right at the start of the simulation.
+Because we choosed an exponential growth model (each bacteria give birth to two new ones we she divides), we've chosen to use an exponential function to represent this phenomenon.
 
 The graph that depicts this is at [this adress](https://drive.google.com/open?id=1JAA5CgLlx63kgONDmUsMR0yLsrOApJfW).
 
 The correlation rate (which is 0.95) is close enought to 1 so that we can consider the model as acceptable, not perfect thought.
-With this we can fixe a minimal requirement on the growth rate, there are few more requirements (on the temperature and the pH) which are explained bellow (but in French, this is just a small presentation sorry).
+With this we can set a minimal requirement on the growth rate, they are few more requirements (on the temperature and the pH) which are explained below (but in French, this is just a small presentation sorry).
 
 ## Présentation de l'équipe
 
@@ -47,7 +47,7 @@ Une bactérie plus adapté au milieux se trouvera dans une position de dominatio
 
 ## Présentation structurée des résultats
 
-Nous avons décidé de choisir le modèle exponentielle afin d'étudier la structure de colonisation d'une boîte de pétri par une ou des bactérie(s):
+Nous avons décidé de choisir le modèle exponentiel afin d'étudier la structure de colonisation d'une boîte de pétri par une ou bien deux bactérie(s):
 ce modèle induit que chaque bactérie mère se sépare en deux nouvelles bactéries filles lors de sa reproduction.
 
 Pour revenir sur les conditions minimales et leur mise en place, la température pour que le taux de croissance ne soit pas nul est limitée à ± 20 degrés Celsius de la température optimale et le pH est lui limité à ± 3 unité de pH du pH optimal.
@@ -72,18 +72,27 @@ On donne aussi ce tableau récapitulatif de la durée de vie minimale (en itéra
 
 
 
-Pour modéliser la croissance de nos bactéries nous avons opté pour une représentation graphique en couleur de l'état de la boite de pétri à laquelle nous avons ajouté des courbes avec le même code couleur.
-En ce qui concerne la boite nous avons utilisé un canvas de tkinter afin de pouvoir l'actualiser à chaque tour de boucle. 
-Il nous permet de dessiner des rectangles (qui sont des carrés en l'occurence) de couleur différente pour chaque entité possible dans la boîte (blanc pour un vide, rouge pour la bactérie 1, orange pour la bactérie 2, vert pour la nourriture, bleu pour l'antibiotique).
+Pour modéliser la croissance de nos bactéries nous avons opté pour une représentation graphique en couleur de l'état de la boîte de pétri à laquelle nous avons ajouté des courbes avec le même code couleur.
+En ce qui concerne la boîte, nous avons utilisé un canvas de tkinter afin de pouvoir l'actualiser à chaque tour de boucle. 
+Il nous permet de dessiner des rectangles (qui sont des carrés en l'occurence) de couleurs différentes pour chaque entité possible dans la boîte (blanc pour un vide, rouge pour la bactérie 1, orange pour la bactérie 2, vert pour la nourriture, bleu pour l'antibiotique).
 Pour l'affichage des courbes de résultats, nous utilisons matplotlib car nous avions déjà de l'expérience avec cette bibliothèque après le TP sur Schelling.
 De plus, cette bibliothèque a pour avantage de permettre à l'utilisateur quelques manipulations sur la fenêtre des courbes afin par exemple de pourvoir zoomer sur une partie qui l'intéresserait plus.
 
-La boite étant grande (100 * 100 donc 10 000 cases au total) il est difficile pour une bactérie seule de coloniser tout le milieu en peu de temps et cela est presque impossible sans ajout de nourriture régulier (sauf si la bactérie possède une longue durée de vie sans se nourrir).
+La boîte étant grande (100 * 100 donc 10 000 cases au total) il est difficile pour une bactérie seule de coloniser tout le milieu en peu de temps et cela est presque impossible sans ajout de nourriture régulier (sauf si la bactérie possède une longue durée de vie sans se nourrir).
 On remarque de plus une diminution de la vitesse d'expension lorsque la courbe du nombre d'individu (qui est croissant) coupe celle de la nourriture (qui décroit).
-En général, lorsque deux bactéries sont présentes la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires).
-Lorsqu'il n'y a qu'une seule bactérie, si elle apparait vers le centre, elle se développera plus vite que si elle apparait dans un coin de la boîte.
+En général, lorsque deux bactéries sont présentes, la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires).
+Lorsqu'il n'y a qu'une seule bactérie, si elle apparaît vers le centre, elle se développera plus vite que si elle apparaît dans un coin de la boîte.
+On peut donc estimer que l'hypothèse secondaire selon laquelle la position de départ au milieu donne une avantage dans le développement d'une bactérie est validée.
 
-Nous avons décidé de retirer certaines fonctionnalité qui était prévu car trop rare dans des conditions d'expériences réelles ; ceci comprend la mutation des bactéries résultant en une résistance aux antibiotiques ainsi que la symbiose entre bactéries de types différents.
+A chaque simulation,les bactéries présentes s’agglutinent sur la nourriture disponible adjacente à leur position, et les colonies suivent la nourriture qui s’éloigne au fur et à mesure. 
+Lorsque de la nourriture apparaît à un endroit éloigné des bactéries, celles-ci ne réagissent pas. Mais si des bactéries sont présentes encore à cet endroit, alors elles se reproduisent tant que la nourriture est disponible et meurent lorsque celle-ci est consumée.
+Cependant, si les bactéries trop éloignées de la nourriture semblent ne pas réagir, c'est parce que le programme ne leur permet pas de détecter la présence de nourriture si celle-ci n'est pas adjacente à leur position. 
+Elles ne peuvent donc pas se déplacer en conséquence. Nous avons tout de même la confirmation qu’elles colonisent le milieu tant que de la nourriture est accessible de façon immédiate.
+Cela signifie donc que les bactéries colonisent le milieu et se divisent tant que de la nourriture est disponible, et migrent vers des milieux propices en même temps que ces derniers se modifient.
+Nous pouvons ainsi valider notre hypothèse principale malgré la faille dans la capacité de nos bactéries à voir au-delà de leur environnement proche, en ajoutant que les milieux déjà colonisés ne sont pas voués à le rester, si la nourriture venait à manquer, puisque les bactéries meurent.
+
+
+Nous avons décidé de retirer certaines fonctionnalités qui étaient initialement prévues car trop rares dans des conditions d'expériences réelles ; ceci comprend la mutation des bactéries résultant en une résistance aux antibiotiques ainsi que la symbiose entre bactéries de souches différentes.
 
 
 ## Lien vers page de blog : <a href="blog.html"> C'est ici ! </a>
