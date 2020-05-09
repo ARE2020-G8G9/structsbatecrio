@@ -5,7 +5,7 @@ Résumé de quelques lignes présentant l'objectif de votre projet, la méthode 
 
 L'objectif de ce projet est de visualiser les structures visibles lors de la colonisation d'une boite de pétri par une ou deux bactéries et de voir comment certains paramètres peuvent modifier ces structures.
 Pour ce faire nous avons réaliser une simulation par Python et un affichage par Tkinter afin d'observer les structures tout en modifiant certain paramètres via une interface pratique.
-En ce qui concerne une expérience avec une seule bactérie, nous pouvons déceler 
+En ce qui concerne une expérience avec une seule bactérie, nous pouvons déceler un taux de croissance minimal en fonction de la durée de vie de la bactérie pour que la souche ne s'éteigne pas. 
 
 
 ## English version: Bacteriological growth and environmental colonization structure
@@ -19,7 +19,7 @@ To do this, we performed a simulation by Python and a display by Tkinter in orde
 ## Présentation de l'équipe
 
 |(´・ω・｀)| ( ͡° ͜ʖ ͡°) | ಠ_ಠ | ᕕ( ᐛ )ᕗ |
-|-----|--|--|--|
+|-----|-----|-----|-----|
 | Kurdyk Louis| Martin Amaury | Rosenthal Massyl ? (il l'enlèvera comme preuve qu'il a au moins travaillé une minute) | Corlue Florian |
 
 
@@ -29,7 +29,9 @@ To do this, we performed a simulation by Python and a display by Tkinter in orde
 
 **Hypothèse principale :** Les bactéries cherchent à coloniser et dominer la totalité de leur milieu tant qu’elles y trouvent de la nourriture.
 
-**Hypothèses secondaires :** En absence d'antibiotique, les différentes populations auront plus tendance à rentrer en concurrence qu’en symbiose, et inversement en présence d’antibiotiques.
+**Hypothèses secondaires :** 
+La position de départ d'une bactérie va grandement influer sur ses chances de survies et sa rapidité à s'étendre, le centre de la boite étant le mieux.
+Une bactérie plus adapté au milieux se trouvera dans une position de domination par rapport à une autre ce qui lui permettra de coloniser plus d'espace.
 
 **Objectifs :** Déterminer la vitesse de colonisation du milieu par une bactérie en fonction de plusieurs critères (ph, température, vitesse de division, taux de mutations...).
 
