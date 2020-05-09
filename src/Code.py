@@ -49,22 +49,25 @@ def taux_de_croissance_effectif(taux_opt, ph, ph_opt, temp, temp_opt):
     if temp < tmin or temp > tmax:
         return 0
     taux_temp = ((temp - tmax)*(temp - tmin)*2) / ((temp_opt - tmin) * ((temp_opt - tmin)*(temp - temp_opt) - (temp_opt - tmax)*(temp_opt + tmin - 2*temp)))
-    if ph_opt <= 6:
-        ph_min = 3
-        ph_max = 6
-    if ph_opt > 6 and ph_opt <= 8:
-        ph_min = 6
-        ph_max = 8
-    if ph_opt > 8:
-        ph_min = 8
-        ph_max = 11
-    if ph < ph_min or ph > ph_max:
-        return 0
-    a = ph - ph_min
-    b = ph - ph_max
-    c = ph - ph_opt
-    taux_ph = a * b / ( a * b - c**2 )
-    return taux_opt * taux_temp * taux_ph
+    if ph == ph_opt:
+        taux_ph = 1
+    else:
+        if ph_opt <= 6:
+            ph_min = 3
+            ph_max = 6
+        if ph_opt > 6 and ph_opt <= 8:
+            ph_min = 6
+            ph_max = 8
+        if ph_opt > 8:
+            ph_min = 8
+            ph_max = 11
+        if ph < ph_min or ph > ph_max:
+            return 0
+        a = ph - ph_min
+        b = ph - ph_max
+        c = ph - ph_opt
+        taux_ph = a * b / ( a * b - c**2 )
+    return taux_opt * min(1, taux_temp) * min(1, taux_ph)
 
 def init_bact(num_souche, taux_opt, ph, ph_opt, temp, temp_opt):
     """
@@ -799,7 +802,7 @@ def affichage():
     Label(Frame1, text="Veuillez choisir les paramètres de la premiere bactérie").pack(padx=15, pady = 18)
     taux1_scl = Scale(Frame1, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
     taux1_scl.pack()
-    taux1_scl.set(0.5)
+    taux1_scl.set(1)
 
     vie1 = Scale(Frame1, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie')
     vie1.pack()
@@ -813,7 +816,7 @@ def affichage():
     t1.pack()
     t1.set(25)
 
-    Ph1 = Scale(Frame1, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal')
+    Ph1 = Scale(Frame1, orient='horizontal', from_=3, to=11, resolution=0.5, tickinterval=1, length=350, label='PH optimal')
     Ph1.pack()
     Ph1.set(7.0)
 
@@ -825,7 +828,7 @@ def affichage():
 
     taux2_scl = Scale(Frame2, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
     taux2_scl.pack()
-    taux2_scl.set(0.5)
+    taux2_scl.set(1)
 
     vie2 = Scale(Frame2, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie')
     vie2.pack()
@@ -839,7 +842,7 @@ def affichage():
     t2.pack()
     t2.set(25)
 
-    Ph2 = Scale(Frame2, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH optimal')
+    Ph2 = Scale(Frame2, orient='horizontal', from_=3, to=11, resolution=0.5, tickinterval=1, length=350, label='PH optimal')
     Ph2.pack()
     Ph2.set(7.0)
 
@@ -851,7 +854,7 @@ def affichage():
     t.pack()
     t.set(25)
 
-    Ph = Scale(Frame4, orient='horizontal', from_=1, to=11.5, resolution=0.5, tickinterval=1, length=350, label='PH de la boite')
+    Ph = Scale(Frame4, orient='horizontal', from_=3, to=11, resolution=0.5, tickinterval=1, length=350, label='PH de la boite')
     Ph.pack()
     Ph.set(7.0)
 
