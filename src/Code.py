@@ -624,7 +624,8 @@ def evolution_variables(boite):
                 box = mort_bacterie(box, i, j, canvas)
             #evolution de la capacité de reproduction
             if contenu == 3 or contenu == 4:
-                box[i][j]['capa_de_repro']+=0.1
+                if box[i][j]['capa_de_repro'] < 0.9:
+                    box[i][j]['capa_de_repro']+=0.1
             #reset du nombre d'actions
             box[i][j]['nb_action'] = 0
 
