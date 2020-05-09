@@ -231,19 +231,7 @@ def voisinage(boite, x, y, taille) :
                         res.append(boite[x + i][y + j])
     return res
 
-def convert_to_array(boite):
-    """
-        boite -> array[list[int]]
-        
-        renvoit la  matrice des contenus de la boite
-    """
-    res = []
-    for i in range(0, len(boite)):
-        temp = []
-        for j in range(0, len(boite[0])):
-            temp.append(boite[i][j]['contenu'])
-        res.append(temp)
-    return np.array(res)
+
 
 ### Statistiques
 #pas mal de fonctions proches des stats de Schelling
@@ -298,7 +286,7 @@ def in_liste(contenu, liste): #cherche si un contenu est dans une liste de dico
     """
         int * list[dico[str : int]] -> bool
         
-        indique si l'élément demandé est dans la ligne ou non.
+        indique si l'élément demandé est dans une liste ou non.
     """
     for i in range(0, len(liste)):
         if contenu == liste[i]['contenu']:
@@ -367,7 +355,7 @@ def distance_parcours(x0, y0, x1, y1):
     """
         int * int * int * int -> int
         
-        retourne la distance entre les case aux coordonnées (x1, y1) et (x2, y2).
+        retourne la distance en déplacement entre les case aux coordonnées (x1, y1) et (x2, y2).
     """
     return abs(x1 - x0) + abs(y1 - y0)
 
@@ -470,7 +458,7 @@ def pos_alea_antibio(boite):
     """
         boite -> tuple[int, int]
         
-        retourne la position de l'antibiotique.
+        retourne une position possible pour l'ajout d'antibiotique.
     """
     #la goutte est de hauteur et largeur max 9
     intervalle = range(0,len(boite) - 9)
@@ -497,7 +485,6 @@ def remplace_par_antibio_si_non_resis(boite, x, y):
 def ajout_antibio(boite, coordonnees):
     """
         boite * tuple[int * int] -> boite
-        je suppose qu'on prend 100 * 100 en format de boite pour faire l'echelle de la goutte
         
         Retourne la boite avec l'antibiotique ajouté.
     """
@@ -621,7 +608,7 @@ def evolution_variables(boite):
     """
         boite -> boite
         
-        Retourne la boite avec toutes les évolutions calculées.
+        Retourne la boite avec toutes les évolutions liées au variables d'age, de caoacité de reproduction et tue les bactéries qui doivent l'être.
     """
     box = boite
 
@@ -651,11 +638,12 @@ def evolution_variables(boite):
     return box
 
 ### Affichage
+    
 def convert_to_array(boite):
     """
-        boite -> array
+        boite -> array[list[int]]
         
-        Retourne boite sous forme d'array
+        renvoit la  matrice des contenus de la boite
     """
     res = []
     for i in range(0, len(boite)):
@@ -929,7 +917,7 @@ def lancer():
 
 def globall(taux1, taux2, vie1, vie2, vie1_bis, vie2_bis, vie_antib, t1, t2, Ph1, Ph2, double, double_chk, t, Ph, nour, Qnour, antib, iter, iter_ent):
     """
-        float*18 * int * int -> NonteType
+        float*18 * int * int -> NoneType
         
         Retourne None après avoir initialisé les variables globales.
     """
@@ -959,7 +947,7 @@ def getall():
     """
         -> NoneType
         
-        Retourne None
+        Récupère les valeurs des curseurs et les attribue aux variables globales correspondante
     """
     globals()["taux1"] = taux1_scl.get()
     globals()["taux2"] = taux2_scl.get()
@@ -986,7 +974,7 @@ def init_canvas(canvas):
     """
         Canvas -> Canvas
         
-        Retourne le Canvas après son initialisation.
+        Retourne un Canvas initialisé.
     """
     #ls = []
     for i in range(0, 100):
