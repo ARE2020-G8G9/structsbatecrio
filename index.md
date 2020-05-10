@@ -82,7 +82,7 @@ La boîte étant grande (100 * 100 donc 10 000 cases au total) il est difficile 
 On remarque de plus une diminution de la vitesse d'expension lorsque la courbe du nombre d'individu (qui est croissant) coupe celle de la nourriture (qui décroît).
 En général, lorsque deux bactéries sont présentes, la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires) va prédominer sur la seconde à condition que leur capacité à s'étendre soit à peu près similaire, cela s'explique par le fait que le centre laisse beaucoup plus d'option pour chercher de la nourriture qu'un bord (dans le graphe ci-dessous, où les deux bactéries ont été initialisées avec exactement les mêmes spécificités -celles par défaut dans le programme-, nous pouvons voir que la bactérie 2, qui dans la simulation commençait au milieu, s'est développée plus aisément que la souche 1).
 
-[Comme les courbes suivantes l'indiquent](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/Exemples/Courbe_batc2_milieu.PNG)
+[Comme les courbes suivantes l'indiquent.](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/Exemples/Courbe_batc2_milieu.PNG)
 
 Lorsqu'il n'y a qu'une seule bactérie, si elle apparaît vers le centre, elle se développera plus vite que si elle apparaît dans un coin de la boîte.
 En effet, [le premier graphique](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/Exemples/Souche1_seule_cote.PNG) a été obtenu à l'issue d'une simulation où la bactérie seule commence sa colonisation sur un côté de la boîte, et [le second graphique](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/Exemples/Souche1_seule_milieu.PNG) est une autre simulation, où cette fois-ci la bactérie seule commence au milieu.
