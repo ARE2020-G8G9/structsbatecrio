@@ -47,6 +47,8 @@ Une bactérie plus adapté au milieux se trouvera dans une position de dominatio
 
 ## Présentation structurée des résultats
 
+Le code en python est disponible [ici](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/src/Code.py).
+
 Nous avons décidé de choisir le modèle exponentiel afin d'étudier la structure de colonisation d'une boîte de pétri par une ou bien deux bactérie(s):
 ce modèle induit que chaque bactérie mère se sépare en deux nouvelles bactéries filles lors de sa reproduction.
 
