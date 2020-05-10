@@ -80,13 +80,17 @@ De plus, cette bibliothèque a pour avantage de permettre à l'utilisateur quelq
 
 La boîte étant grande (100 * 100 donc 10 000 cases au total) il est difficile pour une bactérie seule de coloniser tout le milieu en peu de temps et cela est presque impossible sans ajout de nourriture régulier (sauf si la bactérie possède une longue durée de vie sans se nourrir).
 On remarque de plus une diminution de la vitesse d'expension lorsque la courbe du nombre d'individu (qui est croissant) coupe celle de la nourriture (qui décroît).
-En général, lorsque deux bactéries sont présentes, la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires).
+En général, lorsque deux bactéries sont présentes, la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires) va prédominer sur la seconde à condition que leur capacité à s'étendre soit à peu près similaire, cela s'explique par le fait que le centre laisse beaucoup plus d'option pour chercher de la nourriture qu'un bord.
 Lorsqu'il n'y a qu'une seule bactérie, si elle apparaît vers le centre, elle se développera plus vite que si elle apparaît dans un coin de la boîte.
 On peut donc estimer que l'hypothèse secondaire selon laquelle la position de départ au milieu donne une avantage dans le développement d'une bactérie est validée.
 
+En ce qui concerne la seconde hypothèse secondaire, la bactérie la plus adaptée au milieu se retrouve en effet dans une position largement favorable par rapport à une autre moins adaptée.
+En effet, lorsque deux bactéries interagissent, une des deux bactéries va mourir en laissant un vide. Les bactéries ayant les mêmes chance de victoire, au final le nombre impacte fortement sur le choix de la bactérie qui va dominer le milieu. 
+Au final c'est bien la bactérie qui se développera le plus vite qui pourra remporter la course à la domination dans la boite en surnombrant l'autre souche.
+
 A chaque simulation, les bactéries présentes s’agglutinent sur la nourriture disponible adjacente à leur position, et les colonies suivent la nourriture qui s’éloigne au fur et à mesure. 
 Lorsque de la nourriture apparaît à un endroit éloigné des bactéries, celles-ci ne réagissent pas. Mais si des bactéries sont présentes encore à cet endroit, alors elles se reproduisent tant que la nourriture est disponible et meurent lorsque celle-ci est consumée.
-Cependant, si les bactéries trop éloignées de la nourriture semblent ne pas réagir, c'est parce que le programme ne leur permet pas de détecter la présence de nourriture si celle-ci n'est pas adjacente à leur position. 
+Cependant, si les bactéries trop éloignées de la nourriture semblent ne pas réagir, c'est parce que le programme ne leur permet pas de détecter la présence de nourriture si celle-ci n'est pas adjacente à leur position.
 Elles ne peuvent donc pas se déplacer en conséquence. Nous avons tout de même la confirmation qu’elles colonisent le milieu tant que de la nourriture est accessible de façon immédiate.
 Cela signifie donc que les bactéries colonisent le milieu et se divisent tant que de la nourriture est disponible, et migrent vers des milieux propices en même temps que ces derniers se modifient.
 Nous pouvons ainsi valider notre hypothèse principale malgré la faille dans la capacité de nos bactéries à voir au-delà de leur environnement proche, en ajoutant que les milieux déjà colonisés ne sont pas voués à le rester, si la nourriture venait à manquer, puisque les bactéries meurent.
