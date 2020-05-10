@@ -26,9 +26,9 @@ With this we can set a minimal requirement on the growth rate, they are few more
 
 ## Présentation de l'équipe
 
-|(´・ω・｀)| ( ͡° ͜ʖ ͡°) | ಠ_ಠ | ᕕ( ᐛ )ᕗ |
-|-----|-----|-----|-----|
-| Kurdyk Louis| Martin Amaury | Rosenthal Massyl ? (il l'enlèvera comme preuve qu'il a au moins travaillé une minute) | Corlue Florian |
+|(´・ω・｀)  | ( ͡° ͜ʖ ͡°) | ಠ_ಠ | ᕕ( ᐛ )ᕗ |
+|:-----:|:-----:|:-----:|:-----:|
+| Kurdyk Louis| Martin Amaury | Rosenthal Massyl | Corlue Florian |
 
 
 ## Description synthétique du projet
