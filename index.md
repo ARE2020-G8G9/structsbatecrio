@@ -85,8 +85,8 @@ Lorsqu'il n'y a qu'une seule bactérie, si elle apparaît vers le centre, elle s
 On peut donc estimer que l'hypothèse secondaire selon laquelle la position de départ au milieu donne une avantage dans le développement d'une bactérie est validée.
 
 En ce qui concerne la seconde hypothèse secondaire, la bactérie la plus adaptée au milieu se retrouve en effet dans une position largement favorable par rapport à une autre moins adaptée.
-En effet, lorsque deux bactéries interagissent, une des deux bactéries va mourir en laissant un vide. Les bactéries ayant les mêmes chance de victoire, au final le nombre impacte fortement sur le choix de la bactérie qui va dominer le milieu. 
-Au final c'est bien la bactérie qui se développera le plus vite qui pourra remporter la course à la domination dans la boite en surnombrant l'autre souche.
+De fait, lorsque deux bactéries interagissent, une des deux bactéries va mourir en laissant un vide. Les bactéries ayant les mêmes chances de victoire, au final le nombre impacte fortement sur le choix de la bactérie qui va dominer le milieu. 
+Ainsi, c'est bien la bactérie qui se développera le plus vite qui pourra remporter la course à la domination dans la boîte en surnombrant l'autre souche.
 
 A chaque simulation, les bactéries présentes s’agglutinent sur la nourriture disponible adjacente à leur position, et les colonies suivent la nourriture qui s’éloigne au fur et à mesure. 
 Lorsque de la nourriture apparaît à un endroit éloigné des bactéries, celles-ci ne réagissent pas. Mais si des bactéries sont présentes encore à cet endroit, alors elles se reproduisent tant que la nourriture est disponible et meurent lorsque celle-ci est consumée.
