@@ -41,7 +41,7 @@ With this we can set a minimal requirement on the growth rate, they are few more
 La position de départ d'une bactérie va grandement influer sur ses chances de survies et sa rapidité à s'étendre, le centre de la boite étant le mieux.
 Une bactérie plus adapté au milieux se trouvera dans une position de domination par rapport à une autre ce qui lui permettra de coloniser plus d'espace.
 
-**Objectifs :** Déterminer la vitesse de colonisation du milieu par une bactérie en fonction de plusieurs critères (ph, température, vitesse de division, taux de mutations...).
+**Objectifs :** Etudier les structures récurrentes mises en place dans la colonisation d'une boite de pétri ainsi que les conditions nécessaires à la réalisation de celle-ci. 
 
 **Critère(s) d'évaluation :** Nombres d'individus, de vides, de cases de nourriture dans la boîte.
 
