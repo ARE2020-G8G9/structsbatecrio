@@ -80,9 +80,10 @@ De plus, cette bibliothèque a pour avantage de permettre à l'utilisateur quelq
 
 La boîte étant grande (100 * 100 donc 10 000 cases au total) il est difficile pour une bactérie seule de coloniser tout le milieu en peu de temps et cela est presque impossible sans ajout de nourriture régulier (sauf si la bactérie possède une longue durée de vie sans se nourrir).
 On remarque de plus une diminution de la vitesse d'expension lorsque la courbe du nombre d'individu (qui est croissant) coupe celle de la nourriture (qui décroît).
-En général, lorsque deux bactéries sont présentes, la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires) va prédominer sur la seconde à condition que leur capacité à s'étendre soit à peu près similaire, cela s'explique par le fait que le centre laisse beaucoup plus d'option pour chercher de la nourriture qu'un bord.
+En général, lorsque deux bactéries sont présentes, la bactérie la plus proche du centre au niveau de sa position de départ (qui sont aléatoires) va prédominer sur la seconde à condition que leur capacité à s'étendre soit à peu près similaire, cela s'explique par le fait que le centre laisse beaucoup plus d'option pour chercher de la nourriture qu'un bord (dans le graphe ci-dessous, où les deux bactéries ont été initialisées avec exactement les mêmes spécificités -celles par défaut dans le programme-, nous pouvons voir que la bactérie 2, qui dans la simulation commençait au milieu, s'est développée plus aisément que la souche 1).
+![alt text](https://github.com/ARE2020-G8G9/structsbatecrio/tree/master/Exemples/Courbe_batc2_milieu.png "Courbe_bact2_milieu")
 Lorsqu'il n'y a qu'une seule bactérie, si elle apparaît vers le centre, elle se développera plus vite que si elle apparaît dans un coin de la boîte.
-On peut donc estimer que l'hypothèse secondaire selon laquelle la position de départ au milieu donne une avantage dans le développement d'une bactérie est validée.
+On peut donc estimer que l'hypothèse secondaire selon laquelle la position de départ au milieu donne un avantage dans le développement d'une bactérie est validée.
 
 En ce qui concerne la seconde hypothèse secondaire, la bactérie la plus adaptée au milieu se retrouve en effet dans une position largement favorable par rapport à une autre moins adaptée.
 De fait, lorsque deux bactéries interagissent, une des deux bactéries va mourir en laissant un vide. Les bactéries ayant les mêmes chances de victoire, au final le nombre impacte fortement sur le choix de la bactérie qui va dominer le milieu. 
