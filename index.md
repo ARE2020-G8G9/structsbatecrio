@@ -85,6 +85,12 @@ En général, lorsque deux bactéries sont présentes, la bactérie la plus proc
 [this adress](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/Exemples/Courbe_batc2_milieu.PNG "Courbe_bact2_milieu")
 
 Lorsqu'il n'y a qu'une seule bactérie, si elle apparaît vers le centre, elle se développera plus vite que si elle apparaît dans un coin de la boîte.
+En effet, le premier graphique ci-dessous a été obtenu à l'issue d'une simulation où la bactérie seule commence sa colonisation sur un côté de la boîte, et le 2e graphique est une autre simulation,où cette fois-ci la bactérie seule commence au milieu.
+On remarque bien une différence dans la vitesse de développement sur 50 itérations.
+
+[this adress](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/Exemples/Souche1_seule_cote.PNG "Cote")
+[this adress](https://github.com/ARE2020-G8G9/structsbatecrio/blob/master/Exemples/Souche1_seule_milieu.PNG "Milieu")
+
 On peut donc estimer que l'hypothèse secondaire selon laquelle la position de départ au milieu donne un avantage dans le développement d'une bactérie est validée.
 
 En ce qui concerne la seconde hypothèse secondaire, la bactérie la plus adaptée au milieu se retrouve en effet dans une position largement favorable par rapport à une autre moins adaptée.
