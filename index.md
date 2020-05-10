@@ -3,7 +3,7 @@
 L'objectif de ce projet est de visualiser les structures visibles lors de la colonisation d'une boite de pétri par une ou deux bactéries et de voir comment certains paramètres peuvent modifier ces structures.
 Pour ce faire nous avons réaliser une simulation par Python et un affichage par Tkinter afin d'observer les structures tout en modifiant certain paramètres via une interface pratique.
 
-Pour donner un exemple de résultat ainsi que de condition d'expérience dès maintenant, nous pouvons déceler une durée de vie minimale (en itertations) en fonction du taux de croissance effectif d'une souche afin que cette dernière ne s'éteigne pas au début de la simulation. 
+Pour donner un exemple de résultat ainsi que de conditions d'expérience dès maintenant, nous pouvons déceler une durée de vie minimale (en itérations) en fonction du taux de croissance effectif d'une souche afin que cette dernière ne s'éteigne pas au début de la simulation. 
 Comme le modèle de croissance primaire choisi est exponentiel (chaque bactérie en donne deux nouvelle à chaque division), le format de fonction choisi pour modéliser ce phénomène est lui aussi exponentiel.
 
 Le graphique représentant cela se trouve à [cette adresse](https://drive.google.com/open?id=1N1cfhPkAyh5dQDhtxmFP0bSHg0fmaaeX).
@@ -41,7 +41,7 @@ With this we can set a minimal requirement on the growth rate, they are few more
 La position de départ d'une bactérie va grandement influer sur ses chances de survies et sa rapidité à s'étendre, le centre de la boite étant le mieux.
 Une bactérie plus adapté au milieux se trouvera dans une position de domination par rapport à une autre ce qui lui permettra de coloniser plus d'espace.
 
-**Objectifs :** Etudier les structures récurrentes mises en place dans la colonisation d'une boite de pétri ainsi que les conditions nécessaires à la réalisation de celle-ci. 
+**Objectifs :** Etudier les structures récurrentes mises en place dans la colonisation d'une boite de pétri ainsi que les conditions nécessaires à la réalisation de celle-ci (ph, température, vitesse de division, taux de mutations...).
 
 **Critère(s) d'évaluation :** Nombres d'individus, de vides, de cases de nourriture dans la boîte.
 
