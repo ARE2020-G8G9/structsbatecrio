@@ -132,8 +132,6 @@ def init_pos_bact(boite, bact, canvas):
 
 ### Trouver le voisinage (à tester avec le dico)(semble marcher quand meme)
 
-
-
 def voisinage(boite, x, y, taille) :
     """
         boite * int * int * int -> list[dict[str : Number]]
@@ -175,94 +173,6 @@ def voisinage(boite, x, y, taille) :
             else:
                 res.append(boite[x + i][y + j])
     return res
-
-def voisinage(boite, x, y, taille) :
-    """
-        boite * int * int * int -> list[dict[str : Number]]
-        
-        retourne le voisinage de la case de coordonnées (x, y)
-    """
-    res = []
-    if x + taille < len(boite) and x - taille >= 0:
-        if y - taille >= 0 and y + taille < len(boite[0]):
-            for i in range(-taille, taille + 1):
-                for j in range(- taille, taille + 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-        if y - taille < 0:
-            for i in range(-taille, taille + 1):
-                for j in range(0, taille + 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-        if y + taille >= len(boite[0]):
-            for i in range(-taille, taille + 1):
-                for j in range(- taille, 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-
-    if x + taille >= len(boite) and x - taille >= 0:
-        if y - taille >= 0 and y + taille < len(boite[0]):
-            for i in range(-taille, 1):
-                for j in range(- taille, taille + 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-        if y - taille < 0:
-            for i in range(-taille, 1):
-                for j in range(0, taille + 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-        if y + taille >= len(boite[0]):
-            for i in range(-taille, 1):
-                for j in range(-taille, 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-
-    if x + taille < len(boite) and x - taille < 0:
-        if y - taille >= 0 and y + taille < len(boite[0]):
-            for i in range(0, taille + 1):
-                for j in range(- taille, taille + 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-        if y - taille < 0:
-            for i in range(0, taille + 1):
-                for j in range(0, taille + 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-        if y + taille >= len(boite[0]):
-            for i in range(0, taille + 1):
-                for j in range(- taille, 1):
-                    if i == 0:
-                        if j != 0:
-                            res.append(boite[x + i][y + j])
-                    else:
-                        res.append(boite[x + i][y + j])
-    return res
-
-
 
 ### Statistiques
 #pas mal de fonctions proches des stats de Schelling
@@ -796,44 +706,43 @@ def affichage():
     """
     fenetre = Tk()
 
-    label = Label(fenetre, text = "Merci d'utiliser notre simulation de croissance bacteriologique")
+    label = Label(fenetre, text = "Merci d'utiliser notre simulation de croissance bactériologique")
     label.pack()
-    Label(fenetre, text = "L'unité de température est le degré Celsius.").pack()
 
     #fenetre['bg']='white'
 
     # frame 1 parametres bact1
-    Frame1 = LabelFrame(fenetre, text="Paramètres sur la première bacterie", padx=20, pady=20)
+    Frame1 = LabelFrame(fenetre, text="Paramètres sur la première bactérie", padx=20, pady=20)
     Frame1.pack(side = LEFT, fill="both", expand="yes")
 
     # frame 2 parametre bact2
-    Frame2 = LabelFrame(fenetre, text="Paramètres sur la seconde bacterie", padx=20, pady=20)
+    Frame2 = LabelFrame(fenetre, text="Paramètres sur la seconde bactérie", padx=20, pady=20)
     Frame2.pack(side = LEFT, fill="both", expand="yes")
 
     #Frame 4 parametres de la boite
-    Frame4 = LabelFrame(fenetre, text = "Paramètres sur la boite", padx = 20, pady = 20)
+    Frame4 = LabelFrame(fenetre, text = "Paramètres sur la boîte", padx = 20, pady = 20)
     Frame4.pack(side = LEFT, fill = "both", expand = "yes")
 
 
     # frame 3 boite
-    Frame3 = LabelFrame(fenetre, text="Etat de la boite", padx=20, pady=20)
+    Frame3 = LabelFrame(fenetre, text="Etat de la boîte", padx=20, pady=20)
     Frame3.pack(side = RIGHT, fill="both", expand="yes")
 
     #Frame1
-    Label(Frame1, text="Veuillez choisir les paramètres de la premiere bactérie").pack(padx=15, pady = 18)
+    Label(Frame1, text="Veuillez choisir les paramètres de la première bactérie").pack(padx=15, pady = 18)
     taux1_scl = Scale(Frame1, orient='horizontal', from_=0, to=1, resolution=0.1, tickinterval=0.2, length=350, label='Taux de croissance optimal')
     taux1_scl.pack()
     taux1_scl.set(1)
 
-    vie1 = Scale(Frame1, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie')
+    vie1 = Scale(Frame1, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie (en itérations)')
     vie1.pack()
     vie1.set(10)
 
-    vie1_bis = Scale(Frame1, orient='horizontal', from_=0, to=15, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
+    vie1_bis = Scale(Frame1, orient='horizontal', from_=0, to=15, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger (en itérations)')
     vie1_bis.pack()
     vie1_bis.set(5)
 
-    t1 = Scale(Frame1, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale')
+    t1 = Scale(Frame1, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale (en °C)')
     t1.pack()
     t1.set(25)
 
@@ -843,7 +752,7 @@ def affichage():
 
     #Frame 2
     double = IntVar()
-    double_chk = Checkbutton(Frame2, text="Deux bacteries ?", variable = double)
+    double_chk = Checkbutton(Frame2, text="Deux bactéries ?", variable = double)
     double_chk.pack(pady = 15)
 
 
@@ -851,15 +760,15 @@ def affichage():
     taux2_scl.pack()
     taux2_scl.set(1)
 
-    vie2 = Scale(Frame2, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie')
+    vie2 = Scale(Frame2, orient='horizontal', from_=0, to=25, resolution=1, tickinterval=5, length=350, label='Durée de vie (en itérations)')
     vie2.pack()
     vie2.set(10)
 
-    vie2_bis = Scale(Frame2, orient='horizontal', from_=0, to=15, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger')
+    vie2_bis = Scale(Frame2, orient='horizontal', from_=0, to=15, resolution=1, tickinterval=5, length=350, label='Durée de vie sans manger (en itérations)')
     vie2_bis.pack()
     vie2_bis.set(5)
 
-    t2 = Scale(Frame2, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale')
+    t2 = Scale(Frame2, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température optimale (en °C)')
     t2.pack()
     t2.set(25)
 
@@ -871,7 +780,7 @@ def affichage():
     #Frame4
     Label(Frame4, text ="Veuillez choisir les parametres à appliquer sur la boite").pack(padx = 10, pady = 18)
 
-    t = Scale(Frame4, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température de la boite')
+    t = Scale(Frame4, orient='horizontal', from_=0, to=75, resolution=1, tickinterval=5, length=350, label='Température de la boite (en °C)')
     t.pack()
     t.set(25)
 
