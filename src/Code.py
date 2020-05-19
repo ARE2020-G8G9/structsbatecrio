@@ -141,6 +141,48 @@ def voisinage(boite, x, y, taille) :
         retourne le voisinage de la case de coordonnées (x, y)
     """
     res = []
+    a = 0
+    b = 0
+    c = 0
+    d = 0
+            
+    if x + taille < len(boite):
+        if x - taille < 0:
+            a = 0
+            b = taille + 1
+        else:
+            a = -taille
+            b = taille + 1
+    elif x - taille >= 0:
+        a = -taille
+        b = 1
+    
+    if y - taille >= 0 and y + taille < len(boite[0]):
+            c = -taille
+            d = taille + 1
+    elif y - taille < 0:
+            c = 0
+            d = taille + 1
+    elif y + taille >= len(boite[0]):
+            c = -taille
+            d = 1
+                        
+    for i in range(a, b):
+        for j in range(c, d):
+            if i == 0:
+                if j != 0:
+                    res.append(boite[x + i][y + j])
+            else:
+                res.append(boite[x + i][y + j])
+    return res
+
+def voisinage(boite, x, y, taille) :
+    """
+        boite * int * int * int -> list[dict[str : Number]]
+        
+        retourne le voisinage de la case de coordonnées (x, y)
+    """
+    res = []
     if x + taille < len(boite) and x - taille >= 0:
         if y - taille >= 0 and y + taille < len(boite[0]):
             for i in range(-taille, taille + 1):
