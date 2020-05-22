@@ -28,7 +28,7 @@ With this we can set a minimal requirement on the growth rate, they are few more
 
 |(´・ω・｀)  | ( ͡° ͜ʖ ͡°) | ಠ_ಠ | ᕕ( ᐛ )ᕗ |
 |:-----:|:-----:|:-----:|:-----:|
-| Kurdyk Louis| Martin Amaury | Rosenthal Massyl | Corlue Florian |
+| Kurdyk Louis| Martin Amaury | Sadoudi Massyl | Corlue Florian |
 
 
 ## Description synthétique du projet
