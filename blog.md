@@ -29,4 +29,4 @@ Nous avons pu optimiser un peu le code en regroupant plusieurs fonctions qui eff
 L'affichage de la boite est maintenant dynamique, cela pose un problème de vitesse d'exécution pour les grands nombres d'itérations mais l'animation est plus agréable à regarder.
 Fin de l'édition du texte du site internet avec l'ajout de la description du résultat, et la fin de la présentation du projet en français et anglais.
 
-<a href="index.html"> Retour à la page principale </a>
+<a href="index.html"> Retour à la page principale </a> 
